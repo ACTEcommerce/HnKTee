@@ -65,6 +65,13 @@ body { background-color: #ffffff; color: #000; font-family: 'Helvetica', sans-se
 .cart-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
 
 /* --- MOBILE OPTIMIZATION (Para sa CP) --- */
+/* Add ni sa imong existing style.css */
+table th, table td { padding: 15px; border-bottom: 1px solid #eee; text-align: left; }
+.stat-card { background: #fff; transition: 0.3s; }
+.stat-card:hover { background: #f9f9f9; transform: scale(1.02); }
+.status-tag { background: #f39c12; color: white; padding: 4px 10px; border-radius: 50px; font-size: 10px; font-weight: bold; }
+
+
 
 @media (max-width: 768px) {
     /* Ang Sidebar mobalhin sa babaw imbes sa kilid */
@@ -125,5 +132,8 @@ body { background-color: #ffffff; color: #000; font-family: 'Helvetica', sans-se
         width: 95%;
         margin: 20% auto;
         padding: 20px;
+    }
+}
+      
     }
 }
