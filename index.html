@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>H & E GRAPHIC TEES | Cebu Premium Apparel</title>
+    <title>H & E GRAPHIC TEES | Admin & Store</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,13 +12,9 @@
         <div class="logo">H & E GRAPHIC <b>TEES</b></div>
         <nav>
             <ul class="nav-links">
-                <li><a href="#" class="active">Store</a></li>
+                <li><a href="#" onclick="location.reload()" class="active">Store</a></li>
                 <li><a href="#" id="contactBtn">Contact</a></li>
-                <li>
-                    <button id="cartBtn" class="cart-trigger">
-                        🛒 CART (<span id="cartCount">0</span>)
-                    </button>
-                </li>
+                <li><button id="cartBtn" class="cart-trigger">🛒 BAG (<span id="cartCount">0</span>)</button></li>
             </ul>
         </nav>
         <div class="search-container">
@@ -26,7 +22,7 @@
         </div>
     </header>
 
-    <div class="main-layout">
+    <div class="main-layout" id="storeLayout">
         <aside class="sidebar">
             <section class="filter-group">
                 <h3>Categories</h3>
@@ -35,14 +31,8 @@
                 <button class="filter-btn" data-cat="for women">Women's section</button>
                 <button class="filter-btn" data-cat="unisex">Jacket's section</button>
             </section>
-
-            <section class="filter-group" style="margin-top: 30px;">
-                <h3>Sort By Price</h3>
-                <select id="sortOrder" class="sort-dropdown">
-                    <option value="default">Default</option>
-                    <option value="low">Cheapest to Expensive</option>
-                    <option value="high">Expensive to Cheapest</option>
-                </select>
+            <section class="filter-group" style="margin-top: 50px; border-top: 1px dashed #ccc; padding-top: 20px;">
+                <button class="filter-btn" id="adminToggleBtn" style="color: #888; font-size: 12px;">⚙️ Admin Dashboard</button>
             </section>
         </aside>
 
@@ -51,48 +41,68 @@
         </section>
     </div>
 
-    <div id="productModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <div id="modalDetails"></div>
+    <section id="adminPanel" style="display: none; padding: 40px; max-width: 1200px; margin: auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 10px;">
+        <h1>ADMIN SYSTEM</h1>
+        <button onclick="closeAdmin()" class="cart-trigger">BACK TO STORE</button>
+    </div>
+
+    <div style="display: flex; gap: 10px; margin-top: 20px;">
+        <button class="add-btn" onclick="showTab('salesTab')" style="flex:1;">📊 SALES ANALYSIS</button>
+        <button class="add-btn" onclick="showTab('stockTab')" style="flex:1;">📦 STOCKS MANAGEMENT</button>
+        <button class="add-btn" onclick="showTab('orderTab')" style="flex:1;">🚚 ORDER TRACKING</button>
+    </div>
+
+    <div id="salesTab" class="admin-tab" style="margin-top: 30px;">
+        <h3>SALES PERFORMANCE</h3>
+        <div class="stats-grid">
+            <div class="stat-card"><p>DAILY</p><h2 id="dailySales">₱0</h2></div>
+            <div class="stat-card"><p>MONTHLY</p><h2 id="monthlySales">₱0</h2></div>
+            <div class="stat-card"><p>YEARLY</p><h2 id="yearlySales">₱0</h2></div>
+            <div class="stat-card"><p>TOTAL</p><h2 id="totalSales">₱0</h2></div>
         </div>
     </div>
 
-    <div id="cartModal" class="modal">
-        <div class="modal-content cart-modal-style">
-            <span class="close-cart">&times;</span>
-            <h2 style="border-bottom: 2px solid #000; padding-bottom:10px;">YOUR BAG</h2>
-            <div id="cartItemsList"></div>
-            <div class="cart-total-section">
-                <h3 id="cartTotal">Total: $0.00</h3>
-                <button class="add-btn" id="proceedCheckout" style="width:100%">PROCEED TO CHECKOUT</button>
-            </div>
-        </div>
+    <div id="stockTab" class="admin-tab" style="margin-top: 30px; display:none;">
+        <h3>INVENTORY CONTROL</h3>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Current Stock</th>
+                    <th>Update Quantity</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="adminStockTable"></tbody>
+        </table>
     </div>
 
-    <div id="checkoutModal" class="modal">
-        <div class="modal-content" style="max-width: 400px;">
-            <span class="close-checkout" style="float:right; cursor:pointer; font-size:28px;">&times;</span>
-            <h2>Checkout Details</h2>
-            <form id="checkoutForm">
-                <input type="text" placeholder="Full Name" class="form-input" required>
-                <input type="text" placeholder="Shipping Address" class="form-input" required>
-                <button type="submit" class="add-btn" style="width:100%;">Place Order</button>
-            </form>
-        </div>
+    <div id="orderTab" class="admin-tab" style="margin-top: 30px; display:none;">
+        <h3>CUSTOMER ORDERS</h3>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Items</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="adminOrdersTable"></tbody>
+        </table>
     </div>
+</section>
+   
+   
 
-    <div id="contactModal" class="modal">
-        <div class="modal-content" style="max-width: 450px; text-align: left;">
-            <span class="close-contact" style="float:right; cursor:pointer; font-size:28px;">&times;</span>
-            <h2 style="border-bottom: 2px solid #000; padding-bottom:10px;">CONTACT US</h2>
-            <p>📍 Cebu City, Philippines</p>
-            <p>📞 +63 954 345 6789</p>
-            <p>📸 IG: @he_tees_cebu</p>
-            <button class="add-btn" style="width:100%; margin-top:20px;" onclick="document.getElementById('contactModal').style.display='none'">CLOSE</button>
-        </div>
-    </div>
+    <div id="loginModal" class="modal"><div class="modal-content" style="max-width: 350px; text-align: center;"><h2 style="margin-bottom: 20px;">Admin Login</h2><input type="text" id="adminUser" placeholder="Username" class="form-input"><input type="password" id="adminPass" placeholder="Password" class="form-input"><button onclick="checkLogin()" class="add-btn">LOGIN</button></div></div>
+    <div id="productModal" class="modal"><div class="modal-content"><span class="close-btn">&times;</span><div id="modalDetails"></div></div></div>
+    <div id="cartModal" class="modal"><div class="modal-content"><h2>YOUR BAG</h2><div id="cartItemsList"></div><div class="cart-total-section"><h3 id="cartTotal">Total: ₱0.00</h3><button class="add-btn" id="proceedCheckout">PROCEED TO CHECKOUT</button></div></div></div>
+    <div id="checkoutModal" class="modal"><div class="modal-content"><h2>Checkout Details</h2><form id="checkoutForm"><input type="text" id="custName" placeholder="Full Name" class="form-input" required><input type="text" id="custAddr" placeholder="Shipping Address" class="form-input" required><button type="submit" class="add-btn">Place Order</button></form></div></div>
 
     <script src="script.js"></script>
 </body>
+</html>
 </html>
