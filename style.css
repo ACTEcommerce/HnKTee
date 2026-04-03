@@ -134,6 +134,28 @@ table th, table td { padding: 15px; border-bottom: 1px solid #eee; text-align: l
         padding: 20px;
     }
 }
-      
-    }
+
+.cart-item:hover {
+    background-color: #fafafa;
+}
+
+.cart-item button:hover {
+    transform: scale(1.2);
+    font-weight: bold;
+}
+
+/* Para klaro ug sayon i-click ang X */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 20px; /* Mas maayo sa right ibutang para standard */
+    font-size: 30px;
+    font-weight: bold;
+    color: #000;
+    cursor: pointer;
+    z-index: 10; /* Siguroha nga naa sa babaw */
+}
+
+.close-btn:hover {
+    color: red;
 }
