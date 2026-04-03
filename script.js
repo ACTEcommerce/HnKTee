@@ -98,6 +98,7 @@ function renderShirts(data) {
 
 function openModal(name, price, img) {
     document.getElementById('modalDetails').innerHTML = `
+        <span class="close-btn" onclick="document.getElementById('productModal').style.display='none'">&times;</span>
         <img src="${img}" style="width:100%; max-height:250px; object-fit:contain;" onerror="this.src='https://placehold.co/300x300?text=Shirt'">
         <h2 style="margin-top:15px;">${name}</h2>
         <h3>₱${price.toLocaleString()}.00</h3>
@@ -115,8 +116,32 @@ function addToCart(name, price) {
 
 function updateCartUI() {
     const total = cart.reduce((sum, item) => sum + item.price, 0);
-    document.getElementById('cartItemsList').innerHTML = cart.map(i => `<p style="border-bottom:1px solid #eee; padding:5px;">${i.name} - ₱${i.price}</p>`).join('');
+    const cartList = document.getElementById('cartItemsList');
+    
+    if (cart.length === 0) {
+        cartList.innerHTML = `<p style="text-align:center; padding:20px; color:#888;">Your bag is empty.</p>`;
+    } else {
+        cartList.innerHTML = cart.map((item, index) => `
+            <div class="cart-item" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 10px 0;">
+                <div>
+                    <span style="font-weight:bold;">${item.name}</span><br>
+                    <span style="font-size:0.9em;">₱${item.price.toLocaleString()}</span>
+                </div>
+                <button onclick="removeFromCart(${index})" style="background:none; border:none; color:red; font-size:20px; cursor:pointer; padding:0 10px;">&times;</button>
+            </div>
+        `).join('');
+    }
+    
     document.getElementById('cartTotal').innerText = "Total: ₱" + total.toLocaleString() + ".00";
+    document.getElementById('cartCount').innerText = cart.length;
+}
+
+function removeFromCart(index) {
+    // Remove 1 item at the specific index
+    cart.splice(index, 1);
+    
+    // Refresh the UI
+    updateCartUI();
 }
 
 // 4. ADMIN TAB SYSTEM (FIXED)
