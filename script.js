@@ -1,4 +1,3 @@
-// 1. COMPLETE DATABASE (36 ITEMS)
 const defaultProducts = [
     { id: 1, name: "Urban Echo", category: "for men", price: 350, stock: 10, image: "images/Men_echo.png" },
     { id: 2, name: "Midnight Renegade", category: "for men", price: 380, stock: 5, image: "images/men_renegade.png" },
@@ -38,21 +37,19 @@ const defaultProducts = [
     { id: 36, name: "Nomad Denim", category: "unisex", price: 900, stock: 3, image: "images/unisex_denim.png" }
 ];
 
-// 2. STORAGE HELPERS
 const getInv = () => JSON.parse(localStorage.getItem('he_inv')) || (localStorage.setItem('he_inv', JSON.stringify(defaultProducts)), defaultProducts);
 const saveInv = (d) => localStorage.setItem('he_inv', JSON.stringify(d));
 const getRevs = () => JSON.parse(localStorage.getItem('he_revs')) || [];
 const saveRevs = (d) => localStorage.setItem('he_revs', JSON.stringify(d));
 
-// UPGRADED FAKE REVIEW GENERATOR (Dates & Mixed Ratings)
 function generateFakeReviews() {
     const names = ["Jo****n D.", "Ma****a S.", "Pe****o G.", "Li****a R.", "Em****n L.", "Ka****n V.", "Ro****t B.", "Je****a C."];
     const goodTexts = ["Amazing quality!", "Perfect sublimation print.", "Fast shipping.", "Cool design.", "Very comfortable fabric.", "Will order again!", "Highly recommended!"];
-    const badTexts = ["A bit tight sa akoa.", "Shipping took too long.", "Color is slightly different sa picture.", "Okay lang.", "Not what I expected but decent."];
+    const badTexts = ["A bit tight for me.", "Shipping took too long.", "Color is slightly different from the picture.", "It's okay.", "Not what I expected but decent."];
     
     let revs = [];
     getInv().forEach(p => {
-        let numRevs = Math.floor(Math.random() * 10) + 5; // 5 to 14 reviews per item
+        let numRevs = Math.floor(Math.random() * 10) + 5; 
         for (let i = 0; i < numRevs; i++) {
             let chance = Math.random();
             let stars = 5;
@@ -63,7 +60,6 @@ function generateFakeReviews() {
 
             let text = stars >= 4 ? goodTexts[Math.floor(Math.random() * goodTexts.length)] : badTexts[Math.floor(Math.random() * badTexts.length)];
             
-            // Random date within last 6 months
             let d = new Date();
             d.setDate(d.getDate() - Math.floor(Math.random() * 180));
             let dateStr = d.toISOString().split('T')[0];
@@ -74,13 +70,11 @@ function generateFakeReviews() {
     saveRevs(revs);
 }
 
-// Force regenerate if old structure (no dates) exists
 let existingRevs = getRevs();
 if (existingRevs.length < 10 || (existingRevs.length > 0 && !existingRevs[0].date)) {
     generateFakeReviews();
 }
 
-// 3. CORE LOGIC
 let cart = [];
 let curId = null;
 let discount = 0;
@@ -95,7 +89,7 @@ function initApp() {
             if(promo) promo.style.display = 'flex'; 
             sessionStorage.setItem('promoShown', 'true');
         }
-    }, 500); // Gikan sa 2000, gihimo natong 500 (paspas na ni!)
+    }, 500);
 }
 
 function render(data) {
@@ -141,7 +135,6 @@ function addToCart(n, p) {
     closeModals();
 }
 
-// 4. CHECKOUT
 const proceedBtn = document.getElementById('proceedCheckout');
 if (proceedBtn) {
     proceedBtn.onclick = () => {
@@ -158,7 +151,7 @@ function applyVoucher() {
     const subtotal = cart.reduce((s, i) => s + i.price, 0);
     
     if (input === "HEFREE50") {
-        discount = subtotal * 0.5; // 50% OFF!
+        discount = subtotal * 0.5; 
         document.getElementById('voucherMsg').innerText = "🎟️ 50% OFF Applied!"; 
         document.getElementById('voucherMsg').style.color = "green";
     } else if (input === "") {
@@ -177,20 +170,19 @@ function updateFinalTotal() {
     const shippingFee = subtotal > 0 ? 50 : 0;
     const grandTotal = subtotal + shippingFee - discount;
 
-    // I-update ang text display
     const finalDisplay = document.getElementById('finalPriceDisplay');
     if (finalDisplay) {
         finalDisplay.innerText = "₱" + grandTotal.toLocaleString();
     }
-} // Siguroa nga naay closing bracket diri!
+}
+
 const checkoutForm = document.getElementById('checkoutForm');
 if (checkoutForm) {
     checkoutForm.onsubmit = (e) => {
         e.preventDefault();
         
-        // Basic validation
         if(!document.getElementById('custName').value || !document.getElementById('custAddr').value) {
-            return alert("Palihog fill-up sa tanang fields bai!");
+            return alert("Please fill up all required fields!");
         }
 
         let inv = getInv();
@@ -209,15 +201,11 @@ if (checkoutForm) {
         });
         localStorage.setItem('he_ords', JSON.stringify(ords));
         
-        alert("🎉 Order Success! Salamat sa pagpalit bai."); 
+        alert("🎉 Order Success! Thank you for your purchase."); 
         location.reload();
     };
 }
 
-
-// ==========================================
-// 5. REVIEW DASHBOARD ENGINE (BAG-O!)
-// ==========================================
 let reviewMode = 'store'; 
 let reviewStarFilter = 'all'; 
 let reviewChartIns = null;
@@ -248,16 +236,14 @@ function setStarFilter(star, btn) {
 function updateReviewDashboard() {
     let allRevs = getRevs();
     
-    // 1. Filter by Mode (Store vs Item)
     if (reviewMode === 'item') {
         let selectedId = parseInt(document.getElementById('reviewItemSelect').value);
         allRevs = allRevs.filter(r => r.id === selectedId);
     }
 
-    // 2. Compute Stats
     let total = allRevs.length;
     let avg = 0;
-    let starCounts = [0, 0, 0, 0, 0]; // Index 0 = 1 Star ... Index 4 = 5 Star
+    let starCounts = [0, 0, 0, 0, 0]; 
     if (total > 0) {
         let sum = 0;
         allRevs.forEach(r => {
@@ -267,24 +253,19 @@ function updateReviewDashboard() {
         avg = (sum / total).toFixed(1);
     }
 
-    // 3. Update UI Headers
     document.getElementById('avgRatingDisplay').innerText = avg;
     document.getElementById('totalReviewCount').innerText = total + " Reviews";
     document.getElementById('avgStarsDisplay').innerText = '★'.repeat(Math.round(avg)) + '☆'.repeat(5 - Math.round(avg));
 
-    // 4. Update Bar Chart
     drawRatingDashboardChart(starCounts);
 
-    // 5. Apply Star Filter for the list
     let displayRevs = allRevs;
     if (reviewStarFilter !== 'all') {
         displayRevs = displayRevs.filter(r => r.stars === parseInt(reviewStarFilter));
     }
 
-    // Sort by Newest
     displayRevs.sort((a,b) => new Date(b.date) - new Date(a.date));
 
-    // 6. Render List
     const list = document.getElementById('advancedReviewList');
     if(list) {
         if(displayRevs.length === 0) {
@@ -309,7 +290,6 @@ function drawRatingDashboardChart(counts) {
     if(!ctx) return;
     if(reviewChartIns) reviewChartIns.destroy();
 
-    // Reversing arrays so 5 Star is at the top of the horizontal chart
     let displayCounts = [...counts].reverse(); 
     let labels = ['5 Star', '4 Star', '3 Star', '2 Star', '1 Star'];
     let colors = ['#ee4d2d', '#ff7875', '#ffa940', '#ffd666', '#d9d9d9'];
@@ -321,7 +301,7 @@ function drawRatingDashboardChart(counts) {
             datasets: [{ data: displayCounts, backgroundColor: colors, borderRadius: 4 }]
         },
         options: {
-            indexAxis: 'y', // Makes it horizontal
+            indexAxis: 'y', 
             responsive: true,
             maintainAspectRatio: false,
             scales: { x: { display: false }, y: { grid: { display: false } } },
@@ -330,10 +310,6 @@ function drawRatingDashboardChart(counts) {
     });
 }
 
-
-// ==========================================
-// 6. UI MODALS & OTHERS
-// ==========================================
 function renderReviews() {
     const revs = getRevs().filter(x => x.id === curId);
     document.getElementById('reviewList').innerHTML = revs.length ? revs.map(x => `<div style="margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px;"><b>${x.user}</b> <span style="color:#ee4d2d;">${'★'.repeat(x.stars)}</span><br><span style="font-size:10px;color:#888">${x.date}</span><p>${x.text}</p></div>`).join('') : "No reviews yet.";
@@ -374,9 +350,6 @@ setTimeout(() => {
     }
 }, 500);
 
-// ==========================================
-// 7. ADMIN DASHBOARD & CHARTS LOGIC
-// ==========================================
 function checkLogin() {
     if (document.getElementById('adminUser').value === 'admin' && document.getElementById('adminPass').value === 'admin') {
         document.getElementById('loginModal').style.display = 'none';
@@ -468,67 +441,65 @@ function updateAdminMonthlyChart() {
 function openFooterDetail(title) {
     let content = '';
     
-    // Diri nato i-set ang mga text nga mugawas inig click
     switch(title) {
         case 'Help Centre':
             content = `
                 <h2 style="color:#ee4d2d">❓ Help Centre</h2>
-                <p style="margin-top:15px; line-height:1.6;">Naa kay problema sa imong order? Ayaw kabalaka bai! Pwede ka mo-message sa among Live Chat o i-email mi sa <b>support@hetees.com</b>. Active mi gikan 8AM hangtod 8PM adlaw-adlaw.</p>
+                <p style="margin-top:15px; line-height:1.6;">Having trouble with your order? Don't worry! You can message us via Live Chat or email us at <b>support@hetees.com</b>. We are active from 8AM to 8PM daily.</p>
             `;
             break;
         case 'Payment Methods':
             content = `
                 <h2 style="color:#ee4d2d">💳 Payment Methods</h2>
-                <p style="margin-top:15px;">Diri sa H & E Tees, sayon ra ang pagbayad. Modawat mi og:</p>
+                <p style="margin-top:15px;">At H & E Tees, payment is easy. We accept:</p>
                 <ul style="text-align:left; margin-top:10px; padding-left:20px;">
-                    <li><b>Cash on Delivery (COD)</b> - Bayad inig abot sa item.</li>
-                    <li><b>GCash / Maya</b> - Scan lang ang QR code inig checkout.</li>
-                    <li><b>QRPH</b> - Bisag unsa nga bank app.</li>
+                    <li><b>Cash on Delivery (COD)</b> - Pay upon item arrival.</li>
+                    <li><b>GCash / Maya</b> - Scan the QR code during checkout.</li>
+                    <li><b>QRPH</b> - Compatible with any banking app.</li>
                 </ul>
             `;
             break;
         case 'Order Tracking':
             content = `
                 <h2 style="color:#ee4d2d">🚚 Order Tracking</h2>
-                <p style="margin-top:15px;">Inig ship out sa imong t-shirt, padad-an ka namo og <b>SMS o Email</b> nga naay tracking link. Pwede nimo makita kung asa na dapit imong order (J&T o Flash Express).</p>
+                <p style="margin-top:15px;">Once your shirt is shipped, we will send an <b>SMS or Email</b> with a tracking link. You can track your order via J&T or Flash Express.</p>
             `;
             break;
         case 'Free Shipping':
             content = `
                 <h2 style="color:#ee4d2d">🔥 Free Shipping</h2>
-                <p style="margin-top:15px;">Gusto kag libreng shipping? Sayon ra! Siguroa nga ang imong order mu-abot og <b>₱1,500 pataas</b> para automatic mawala ang shipping fee sa imong checkout!</p>
+                <p style="margin-top:15px;">Want free shipping? Simple! Just ensure your order reaches <b>₱1,500 and above</b> to automatically waive the shipping fee at checkout!</p>
             `;
             break;
         case 'Return & Refund':
             content = `
                 <h2 style="color:#ee4d2d">🔄 Return & Refund</h2>
-                <p style="margin-top:15px;">Kung naay damage ang print o sayop ang size nga nadawat:
-                <br><br>1. Ayaw usa labhi ang shirt.
-                <br>2. Picture-ri ang resibo ug ang item.
-                <br>3. I-message mi sulod sa <b>7 ka adlaw</b> para ma-ilisdan dayon namo.</p>
+                <p style="margin-top:15px;">If there is print damage or an incorrect size received:
+                <br><br>1. Do not wash the shirt yet.
+                <br>2. Take a photo of the receipt and the item.
+                <br>3. Message us within <b>7 days</b> so we can replace it immediately.</p>
             `;
             break;
         case 'Shop Policies':
             content = `
                 <h2 style="color:#ee4d2d">📜 Shop Policies</h2>
-                <p style="margin-top:15px;">Respetoay lang ta bai. No cancellation of orders once na-print na ang design (kay made-to-order mi). Siguroa ang imong size gamit ang among Size Chart.</p>
+                <p style="margin-top:15px;">No cancellation of orders once the design has been printed (as products are made-to-order). Please confirm your size using our Size Chart.</p>
             `;
             break;
         case 'Privacy Policy':
             content = `
                 <h2 style="color:#ee4d2d">🔒 Privacy Policy</h2>
-                <p style="margin-top:15px;">Ang imong address ug contact number kay safe sa amoa. Gamiton ra ni namo para sa pag-deliver sa imong order ug dili ni namo i-baligya sa uban.</p>
+                <p style="margin-top:15px;">Your address and contact number are safe with us. We only use this information for delivery purposes and do not sell it to third parties.</p>
             `;
             break;
         case 'Flash Deals':
             content = `
                 <h2 style="color:#ee4d2d">⚡ Flash Deals</h2>
-                <p style="margin-top:15px;">Atangi ang among Flash Sale kada kinsena ug katapusan sa buwan! Mo-ubos ang presyo sa piniling designs hangtod <b>₱250 na lang!</b></p>
+                <p style="margin-top:15px;">Watch out for our Flash Sales every 15th and end of the month! Selected designs drop as low as <b>₱250!</b></p>
             `;
             break;
     }
 
-    // I-display ang sulod sa About Modal
     const modalContent = document.getElementById('aboutContent');
     const modal = document.getElementById('aboutModal');
     
