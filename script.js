@@ -177,10 +177,12 @@ function updateFinalTotal() {
     const shippingFee = subtotal > 0 ? 50 : 0;
     const grandTotal = subtotal + shippingFee - discount;
 
-    // ... (imong logic sa pag display sa breakdown sa sulod sa checkout items list)
-    
-    document.getElementById('finalPriceDisplay').innerText = "₱" + grandTotal.toLocaleString();
-}
+    // I-update ang text display
+    const finalDisplay = document.getElementById('finalPriceDisplay');
+    if (finalDisplay) {
+        finalDisplay.innerText = "₱" + grandTotal.toLocaleString();
+    }
+} // Siguroa nga naay closing bracket diri!
 const checkoutForm = document.getElementById('checkoutForm');
 if (checkoutForm) {
     checkoutForm.onsubmit = (e) => {
