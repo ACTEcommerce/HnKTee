@@ -1,22 +1,19 @@
-// 1. COMPLETE PRODUCT DATABASE (36 ITEMS)
-const products = [
-    // --- FOR MEN (12 Items) ---
-    { id: 1, name: "Urban Echo", category: "for men", price: 350, stock: 8, image: "images/Men_echo.png" },
-    { id: 2, name: "Midnight Renegade", category: "for men", price: 380, stock: 2, image: "images/men_renegade.png" },
+// 1. COMPLETE DATABASE (36 ITEMS)
+const defaultProducts = [
+    { id: 1, name: "Urban Echo", category: "for men", price: 350, stock: 10, image: "images/Men_echo.png" },
+    { id: 2, name: "Midnight Renegade", category: "for men", price: 380, stock: 5, image: "images/men_renegade.png" },
     { id: 3, name: "Iron & Ink", category: "for men", price: 350, stock: 12, image: "images/men_iron.png" },
-    { id: 4, name: "Nomad Theory", category: "for men", price: 420, stock: 5, image: "images/men_nomad.png" },
-    { id: 5, name: "Vantage Point", category: "for men", price: 320, stock: 10, image: "images/men_vantage.png" },
-    { id: 6, name: "Static Signal", category: "for men", price: 380, stock: 0, image: "images/men_static.png" },
+    { id: 4, name: "Nomad Theory", category: "for men", price: 420, stock: 8, image: "images/men_nomad.png" },
+    { id: 5, name: "Vantage Point", category: "for men", price: 320, stock: 15, image: "images/men_vantage.png" },
+    { id: 6, name: "Static Signal", category: "for men", price: 380, stock: 2, image: "images/men_static.png" },
     { id: 7, name: "Chrome Horizon", category: "for men", price: 450, stock: 7, image: "images/men_chrome.png" },
-    { id: 8, name: "Rogue Element", category: "for men", price: 360, stock: 1, image: "images/men_rogue.png" },
+    { id: 8, name: "Rogue Element", category: "for men", price: 360, stock: 4, image: "images/men_rogue.png" },
     { id: 9, name: "Apex Flow", category: "for men", price: 340, stock: 9, image: "images/men_apex.png" },
     { id: 10, name: "Obsidian Soul", category: "for men", price: 400, stock: 6, image: "images/men_obsidian.png" },
-    { id: 11, name: "Native Pulse", category: "for men", price: 380, stock: 4, image: "images/men_pulse.png" },
-    { id: 12, name: "The Architect", category: "for men", price: 420, stock: 3, image: "images/men_architect.png" },
-
-    // --- FOR WOMEN (12 Items) ---
+    { id: 11, name: "Native Pulse", category: "for men", price: 380, stock: 3, image: "images/men_pulse.png" },
+    { id: 12, name: "The Architect", category: "for men", price: 420, stock: 5, image: "images/men_architect.png" },
     { id: 13, name: "Wildflower Spirit", category: "for women", price: 280, stock: 15, image: "images/women_wild.png" },
-    { id: 14, name: "Luna Bloom", category: "for women", price: 300, stock: 3, image: "images/women_luna.png" },
+    { id: 14, name: "Luna Bloom", category: "for women", price: 300, stock: 4, image: "images/women_luna.png" },
     { id: 15, name: "Velvet Riot", category: "for women", price: 350, stock: 7, image: "images/women_velvet.png" },
     { id: 16, name: "Ethereal Aura", category: "for women", price: 320, stock: 10, image: "images/women_ethereal.png" },
     { id: 17, name: "Neon Muse", category: "for women", price: 380, stock: 5, image: "images/women_neon.png" },
@@ -24,11 +21,9 @@ const products = [
     { id: 19, name: "Femme Force", category: "for women", price: 340, stock: 11, image: "images/women_force.png" },
     { id: 20, name: "Cosmic Charm", category: "for women", price: 320, stock: 6, image: "images/women_cosmic.png" },
     { id: 21, name: "Petal & Paper", category: "for women", price: 280, stock: 9, image: "images/women_petal.png" },
-    { id: 22, name: "Electric Honey", category: "for women", price: 360, stock: 2, image: "images/women_honey.png" },
+    { id: 22, name: "Electric Honey", category: "for women", price: 360, stock: 3, image: "images/women_honey.png" },
     { id: 23, name: "Serene State", category: "for women", price: 300, stock: 14, image: "images/women_serene.png" },
     { id: 24, name: "Indigo Dream", category: "for women", price: 320, stock: 9, image: "images/women_indigo.png" },
-
-    // --- UNISEX / JACKETS (12 Items) ---
     { id: 25, name: "Midnight Bomber", category: "unisex", price: 850, stock: 4, image: "images/unisex_bomber.png" },
     { id: 26, name: "Stellar Scout", category: "unisex", price: 550, stock: 10, image: "images/unisex_hoodie.png" },
     { id: 27, name: "Pixel Windbreaker", category: "unisex", price: 750, stock: 6, image: "images/unisex_windbreaker.png" },
@@ -43,250 +38,500 @@ const products = [
     { id: 36, name: "Nomad Denim", category: "unisex", price: 900, stock: 3, image: "images/unisex_denim.png" }
 ];
 
-let cart = [];
+// 2. STORAGE HELPERS
+const getInv = () => JSON.parse(localStorage.getItem('he_inv')) || (localStorage.setItem('he_inv', JSON.stringify(defaultProducts)), defaultProducts);
+const saveInv = (d) => localStorage.setItem('he_inv', JSON.stringify(d));
+const getRevs = () => JSON.parse(localStorage.getItem('he_revs')) || [];
+const saveRevs = (d) => localStorage.setItem('he_revs', JSON.stringify(d));
 
-// 2. INITIALIZE STORE & DEMO DATA
-function initApp() {
-    let existingOrders = JSON.parse(localStorage.getItem('he_orders'));
+// UPGRADED FAKE REVIEW GENERATOR (Dates & Mixed Ratings)
+function generateFakeReviews() {
+    const names = ["Jo****n D.", "Ma****a S.", "Pe****o G.", "Li****a R.", "Em****n L.", "Ka****n V.", "Ro****t B.", "Je****a C."];
+    const goodTexts = ["Amazing quality!", "Perfect sublimation print.", "Fast shipping.", "Cool design.", "Very comfortable fabric.", "Will order again!", "Highly recommended!"];
+    const badTexts = ["A bit tight sa akoa.", "Shipping took too long.", "Color is slightly different sa picture.", "Okay lang.", "Not what I expected but decent."];
     
-    if (!existingOrders || existingOrders.length === 0) {
-        const firstNames = ["James", "Emma", "Michael", "Sophia", "William", "Olivia", "David", "Mia", "Noah", "Charlotte"];
-        const lastNames = ["Smith", "Johnson", "Brown", "Williams", "Jones", "Miller", "Davis", "Garcia"];
-        const designs = ["Urban Echo", "Midnight Bomber", "Luna Bloom", "Titan Varsity", "Apex Flow"];
-        
-        let demoOrders = [];
-        const today = new Date();
+    let revs = [];
+    getInv().forEach(p => {
+        let numRevs = Math.floor(Math.random() * 10) + 5; // 5 to 14 reviews per item
+        for (let i = 0; i < numRevs; i++) {
+            let chance = Math.random();
+            let stars = 5;
+            if(chance < 0.05) stars = 1;
+            else if(chance < 0.1) stars = 2;
+            else if(chance < 0.25) stars = 3;
+            else if(chance < 0.5) stars = 4;
 
-        for (let i = 1; i <= 65; i++) {
-            let orderDate = new Date();
-            if (i <= 8) { orderDate = today; } 
-            else if (i <= 45) { orderDate.setDate(today.getDate() - Math.floor(Math.random() * 20)); } 
-            else { orderDate.setMonth(today.getMonth() - 1); } 
+            let text = stars >= 4 ? goodTexts[Math.floor(Math.random() * goodTexts.length)] : badTexts[Math.floor(Math.random() * badTexts.length)];
+            
+            // Random date within last 6 months
+            let d = new Date();
+            d.setDate(d.getDate() - Math.floor(Math.random() * 180));
+            let dateStr = d.toISOString().split('T')[0];
 
-            const fName = firstNames[Math.floor(Math.random() * firstNames.length)];
-            const lName = lastNames[Math.floor(Math.random() * lastNames.length)];
-
-            demoOrders.push({
-                id: "ORD-" + (7000 + i),
-                customer: `${fName} ${lName}`,
-                items: designs[Math.floor(Math.random() * designs.length)],
-                total: [350, 850, 1100, 420][Math.floor(Math.random() * 4)],
-                date: orderDate.toISOString().split('T')[0],
-                address: "USA Shipping Blvd",
-                email: `${fName.toLowerCase()}@email.com`
-            });
+            revs.push({ id: p.id, user: names[Math.floor(Math.random() * names.length)], stars: stars, text: text, pName: p.name, date: dateStr });
         }
-        localStorage.setItem('he_orders', JSON.stringify(demoOrders));
-    }
-    renderShirts(products);
+    });
+    saveRevs(revs);
 }
 
-// 3. STOREFRONT LOGIC
-function renderShirts(data) {
+// Force regenerate if old structure (no dates) exists
+let existingRevs = getRevs();
+if (existingRevs.length < 10 || (existingRevs.length > 0 && !existingRevs[0].date)) {
+    generateFakeReviews();
+}
+
+// 3. CORE LOGIC
+let cart = [];
+let curId = null;
+let discount = 0;
+
+function initApp() {
+    render(getInv());
+    initReviewDashboard(); 
+    
+    setTimeout(() => { 
+        if (!sessionStorage.getItem('promoShown')) {
+            let promo = document.getElementById('promoModal');
+            if(promo) promo.style.display = 'flex'; 
+            sessionStorage.setItem('promoShown', 'true');
+        }
+    }, 500); // Gikan sa 2000, gihimo natong 500 (paspas na ni!)
+}
+
+function render(data) {
     const grid = document.getElementById('productGrid');
     if(!grid) return;
     grid.innerHTML = data.map(p => `
-        <div class="card" onclick="openModal('${p.name}', ${p.price}, '${p.image}')">
+        <div class="card">
             <img src="${p.image}" onerror="this.src='https://placehold.co/300x300?text=${p.name}'">
-            <h3>${p.name}</h3>
-            <p>₱${p.price.toLocaleString()}.00</p>
-            <p style="font-size:11px; color:${p.stock <= 3 ? 'red' : 'green'}; font-weight:bold;">STOCK: ${p.stock}</p>
-            <button class="add-btn">VIEW DETAILS</button>
-        </div>
-    `).join('');
+            <h4>${p.name}</h4><p>₱${p.price}</p>
+            <p style="font-size:10px; color:${p.stock < 3 ? 'red' : 'green'}">Stock: ${p.stock}</p>
+            <button class="add-btn" onclick="openP(${p.id})">VIEW</button>
+        </div>`).join('');
 }
 
-function openModal(name, price, img) {
+function filterCat(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filtered = (cat === 'all') ? getInv() : getInv().filter(p => p.category === cat);
+    render(filtered);
+}
+
+function openP(id) {
+    const p = getInv().find(x => x.id === id);
+    curId = id;
     document.getElementById('modalDetails').innerHTML = `
-        <span class="close-btn" onclick="document.getElementById('productModal').style.display='none'">&times;</span>
-        <img src="${img}" style="width:100%; max-height:250px; object-fit:contain;" onerror="this.src='https://placehold.co/300x300?text=Shirt'">
-        <h2 style="margin-top:15px;">${name}</h2>
-        <h3>₱${price.toLocaleString()}.00</h3>
-        <button class="add-btn" onclick="addToCart('${name}', ${price})">ADD TO BAG</button>
-    `;
-    document.getElementById('productModal').style.display = "block";
+        <img src="${p.image}" onerror="this.src='https://placehold.co/300x300?text=${p.name}'">
+        <div style="text-align:left;">
+            <p style="color:#888; font-size:12px;">${p.category.toUpperCase()}</p>
+            <h2 style="margin:5px 0;">${p.name}</h2>
+            <p style="font-size:22px; font-weight:bold; color:#000; margin-bottom:15px;">₱${p.price}</p>
+            <p style="font-size:13px; margin-bottom:20px;">Availability: <b>${p.stock} in stock</b></p>
+            <button class="add-btn" onclick="addToCart('${p.name}', ${p.price})">ADD TO BAG</button>
+        </div>`;
+    renderReviews();
+    document.getElementById('productModal').style.display = 'block';
 }
 
-function addToCart(name, price) {
-    cart.push({name, price});
+function addToCart(n, p) {
+    let inv = getInv();
+    if (inv.find(x => x.name === n).stock <= 0) return alert("Sold out!");
+    cart.push({ name: n, price: p });
     document.getElementById('cartCount').innerText = cart.length;
-    updateCartUI();
-    alert(name + " added to bag!");
+    closeModals();
 }
 
-function updateCartUI() {
-    const total = cart.reduce((sum, item) => sum + item.price, 0);
-    const cartList = document.getElementById('cartItemsList');
+// 4. CHECKOUT
+const proceedBtn = document.getElementById('proceedCheckout');
+if (proceedBtn) {
+    proceedBtn.onclick = () => {
+        if (cart.length === 0) return alert("Empty Bag!");
+        document.getElementById('cartModal').style.display = 'none';
+        document.getElementById('checkoutItemsList').innerHTML = cart.map(i => `<div style="display:flex;justify-content:space-between;padding:5px 0;"><span>${i.name}</span><span>₱${i.price}</span></div>`).join('');
+        updateFinalTotal();
+        document.getElementById('checkoutModal').style.display = 'block';
+    };
+}
+
+function applyVoucher() {
+    const input = document.getElementById('voucherInput').value.trim().toUpperCase();
+    const subtotal = cart.reduce((s, i) => s + i.price, 0);
     
-    if (cart.length === 0) {
-        cartList.innerHTML = `<p style="text-align:center; padding:20px; color:#888;">Your bag is empty.</p>`;
+    if (input === "HEFREE50") {
+        discount = subtotal * 0.5; // 50% OFF!
+        document.getElementById('voucherMsg').innerText = "🎟️ 50% OFF Applied!"; 
+        document.getElementById('voucherMsg').style.color = "green";
+    } else if (input === "") {
+        discount = 0;
+        document.getElementById('voucherMsg').innerText = "";
     } else {
-        cartList.innerHTML = cart.map((item, index) => `
-            <div class="cart-item" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 10px 0;">
-                <div>
-                    <span style="font-weight:bold;">${item.name}</span><br>
-                    <span style="font-size:0.9em;">₱${item.price.toLocaleString()}</span>
-                </div>
-                <button onclick="removeFromCart(${index})" style="background:none; border:none; color:red; font-size:20px; cursor:pointer; padding:0 10px;">&times;</button>
-            </div>
-        `).join('');
+        discount = 0; 
+        document.getElementById('voucherMsg').innerText = "❌ Invalid Voucher"; 
+        document.getElementById('voucherMsg').style.color = "red";
     }
+    updateFinalTotal();
+}
+
+function updateFinalTotal() {
+    const subtotal = cart.reduce((s, i) => s + i.price, 0);
+    const shippingFee = subtotal > 0 ? 50 : 0;
+    const grandTotal = subtotal + shippingFee - discount;
+
+    // ... (imong logic sa pag display sa breakdown sa sulod sa checkout items list)
     
-    document.getElementById('cartTotal').innerText = "Total: ₱" + total.toLocaleString() + ".00";
-    document.getElementById('cartCount').innerText = cart.length;
+    document.getElementById('finalPriceDisplay').innerText = "₱" + grandTotal.toLocaleString();
+}
+const checkoutForm = document.getElementById('checkoutForm');
+if (checkoutForm) {
+    checkoutForm.onsubmit = (e) => {
+        e.preventDefault();
+        
+        // Basic validation
+        if(!document.getElementById('custName').value || !document.getElementById('custAddr').value) {
+            return alert("Palihog fill-up sa tanang fields bai!");
+        }
+
+        let inv = getInv();
+        cart.forEach(c => { 
+            let p = inv.find(x => x.name === c.name); 
+            if (p) p.stock--; 
+        });
+        saveInv(inv);
+        
+        let ords = JSON.parse(localStorage.getItem('he_ords')) || [];
+        ords.push({ 
+            id: Date.now().toString().slice(-4), 
+            name: document.getElementById('custName').value, 
+            total: document.getElementById('finalPriceDisplay').innerText,
+            date: new Date().toLocaleString()
+        });
+        localStorage.setItem('he_ords', JSON.stringify(ords));
+        
+        alert("🎉 Order Success! Salamat sa pagpalit bai."); 
+        location.reload();
+    };
 }
 
-function removeFromCart(index) {
-    // Remove 1 item at the specific index
-    cart.splice(index, 1);
+
+// ==========================================
+// 5. REVIEW DASHBOARD ENGINE (BAG-O!)
+// ==========================================
+let reviewMode = 'store'; 
+let reviewStarFilter = 'all'; 
+let reviewChartIns = null;
+
+function initReviewDashboard() {
+    const select = document.getElementById('reviewItemSelect');
+    if(select) {
+        select.innerHTML = getInv().map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+    }
+    updateReviewDashboard();
+}
+
+function setReviewMode(mode) {
+    reviewMode = mode;
+    document.getElementById('btnStoreView').className = mode === 'store' ? 'add-btn active-mode' : 'add-btn inactive-mode';
+    document.getElementById('btnItemView').className = mode === 'item' ? 'add-btn active-mode' : 'add-btn inactive-mode';
+    document.getElementById('reviewItemSelect').style.display = mode === 'item' ? 'inline-block' : 'none';
+    updateReviewDashboard();
+}
+
+function setStarFilter(star, btn) {
+    reviewStarFilter = star;
+    document.querySelectorAll('.filter-star').forEach(b => b.classList.remove('active-star'));
+    btn.classList.add('active-star');
+    updateReviewDashboard();
+}
+
+function updateReviewDashboard() {
+    let allRevs = getRevs();
     
-    // Refresh the UI
-    updateCartUI();
+    // 1. Filter by Mode (Store vs Item)
+    if (reviewMode === 'item') {
+        let selectedId = parseInt(document.getElementById('reviewItemSelect').value);
+        allRevs = allRevs.filter(r => r.id === selectedId);
+    }
+
+    // 2. Compute Stats
+    let total = allRevs.length;
+    let avg = 0;
+    let starCounts = [0, 0, 0, 0, 0]; // Index 0 = 1 Star ... Index 4 = 5 Star
+    if (total > 0) {
+        let sum = 0;
+        allRevs.forEach(r => {
+            sum += r.stars;
+            starCounts[r.stars - 1]++;
+        });
+        avg = (sum / total).toFixed(1);
+    }
+
+    // 3. Update UI Headers
+    document.getElementById('avgRatingDisplay').innerText = avg;
+    document.getElementById('totalReviewCount').innerText = total + " Reviews";
+    document.getElementById('avgStarsDisplay').innerText = '★'.repeat(Math.round(avg)) + '☆'.repeat(5 - Math.round(avg));
+
+    // 4. Update Bar Chart
+    drawRatingDashboardChart(starCounts);
+
+    // 5. Apply Star Filter for the list
+    let displayRevs = allRevs;
+    if (reviewStarFilter !== 'all') {
+        displayRevs = displayRevs.filter(r => r.stars === parseInt(reviewStarFilter));
+    }
+
+    // Sort by Newest
+    displayRevs.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+    // 6. Render List
+    const list = document.getElementById('advancedReviewList');
+    if(list) {
+        if(displayRevs.length === 0) {
+            list.innerHTML = "<p style='text-align:center; padding: 20px; color:#888;'>No reviews match your filter.</p>";
+        } else {
+            list.innerHTML = displayRevs.map(r => `
+                <div class="gen-review-card">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+                        <b>${r.user}</b>
+                        <span style="color:#ee4d2d; font-size:16px;">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</span>
+                    </div>
+                    <p style="font-size:11px; color:#888; margin-bottom:10px;">Variation: ${r.pName} | Date: ${r.date}</p>
+                    <p style="color:#333;">"${r.text}"</p>
+                </div>
+            `).join('');
+        }
+    }
 }
 
-// 4. ADMIN TAB SYSTEM (FIXED)
-function showTab(tabId) {
-    // Tago-on tanang tabs
-    const tabs = document.querySelectorAll('.admin-tab');
-    tabs.forEach(tab => tab.style.display = 'none');
+function drawRatingDashboardChart(counts) {
+    const ctx = document.getElementById('ratingChart');
+    if(!ctx) return;
+    if(reviewChartIns) reviewChartIns.destroy();
 
-    // Ipakita ang napili nga tab
-    document.getElementById(tabId).style.display = 'block';
+    // Reversing arrays so 5 Star is at the top of the horizontal chart
+    let displayCounts = [...counts].reverse(); 
+    let labels = ['5 Star', '4 Star', '3 Star', '2 Star', '1 Star'];
+    let colors = ['#ee4d2d', '#ff7875', '#ffa940', '#ffd666', '#d9d9d9'];
 
-    // Refresh content base sa tab
-    if(tabId === 'stockTab') renderStockAdmin();
-    if(tabId === 'salesTab') loadAdminDashboard();
+    reviewChartIns = new Chart(ctx.getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{ data: displayCounts, backgroundColor: colors, borderRadius: 4 }]
+        },
+        options: {
+            indexAxis: 'y', // Makes it horizontal
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: { x: { display: false }, y: { grid: { display: false } } },
+            plugins: { legend: { display: false } }
+        }
+    });
 }
 
-function renderStockAdmin() {
-    const tableBody = document.getElementById('adminStockTable');
-    if(!tableBody) return;
-    tableBody.innerHTML = products.map(p => `
-        <tr style="border-bottom: 1px solid #eee;">
-            <td style="padding:10px;">${p.name}</td>
-            <td style="font-weight:bold; color:${p.stock <=3 ? 'red' : 'black'}">${p.stock}</td>
-            <td><input type="number" id="qty-${p.id}" style="width:60px; padding:5px;" placeholder="0"></td>
-            <td><button onclick="updateStock(${p.id})" class="add-btn" style="padding:5px 10px; width:auto;">UPDATE</button></td>
-        </tr>
-    `).join('');
+
+// ==========================================
+// 6. UI MODALS & OTHERS
+// ==========================================
+function renderReviews() {
+    const revs = getRevs().filter(x => x.id === curId);
+    document.getElementById('reviewList').innerHTML = revs.length ? revs.map(x => `<div style="margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px;"><b>${x.user}</b> <span style="color:#ee4d2d;">${'★'.repeat(x.stars)}</span><br><span style="font-size:10px;color:#888">${x.date}</span><p>${x.text}</p></div>`).join('') : "No reviews yet.";
 }
 
-function updateStock(id) {
-    const input = document.getElementById(`qty-${id}`);
-    const val = parseInt(input.value);
-    if(isNaN(val)) return alert("Butangi og number, boss!");
+function closeModals() { document.querySelectorAll('.modal').forEach(m => m.style.display = 'none'); }
+function closeOutside(e) { if (e.target.classList.contains('modal')) closeModals(); }
+function openContact() { document.getElementById('contactModal').style.display = 'block'; }
+function closePromo() { document.getElementById('promoModal').style.display = 'none'; }
 
-    const prod = products.find(p => p.id === id);
-    prod.stock += val;
-    input.value = "";
-    renderStockAdmin(); // Refresh table
-    renderShirts(products); // Refresh storefront stocks
-    alert(`${prod.name} stock updated!`);
+function openAbout(section) {
+    let content = '';
+    if (section === 'company') content = '<h2>🏢 About Company</h2><p style="margin-top:10px;">H & E GRAPHIC TEES provides premium sublimation prints and high-quality apparel.</p>';
+    if (section === 'products') content = '<h2>👕 About Products</h2><p style="margin-top:10px;">Our products feature premium dry-fit materials perfect for everyday wear.</p>';
+    if (section === 'owner') content = '<h2>👤 About Owner</h2><p style="margin-top:10px;">Dedicated to bringing the best graphic designs to life through top-tier printing.</p>';
+    document.getElementById('aboutContent').innerHTML = content;
+    document.getElementById('aboutModal').style.display = 'block';
 }
 
-// 5. LOGIN & DASHBOARD
+setTimeout(() => {
+    const cartBtn = document.getElementById('cartBtn');
+    if(cartBtn) {
+        cartBtn.onclick = () => {
+            const cartList = document.getElementById('cartItemsList');
+            if (cart.length === 0) cartList.innerHTML = "<p>Your bag is empty.</p>";
+            else cartList.innerHTML = cart.map(i => `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #eee;"><span>${i.name}</span><span>₱${i.price}</span></div>`).join('');
+            document.getElementById('cartTotalDisplay').innerText = "Total: ₱" + cart.reduce((s, i) => s + i.price, 0);
+            document.getElementById('cartModal').style.display = 'block';
+        };
+    }
+    const searchInput = document.getElementById('shirtSearch');
+    if(searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = getInv().filter(p => p.name.toLowerCase().includes(term) || p.category.includes(term));
+            render(filtered);
+        });
+    }
+}, 500);
+
+// ==========================================
+// 7. ADMIN DASHBOARD & CHARTS LOGIC
+// ==========================================
 function checkLogin() {
-    const u = document.getElementById('adminUser').value;
-    const p = document.getElementById('adminPass').value;
-    if (u === "admin" && p === "admin") {
-        document.getElementById('loginModal').style.display = "none";
-        document.getElementById('storeLayout').style.display = "none";
-        document.getElementById('adminPanel').style.display = "block";
-        loadAdminDashboard();
-    } else { alert("Sayop imong login details!"); }
+    if (document.getElementById('adminUser').value === 'admin' && document.getElementById('adminPass').value === 'admin') {
+        document.getElementById('loginModal').style.display = 'none';
+        document.getElementById('storeLayout').style.display = 'none';
+        document.getElementById('adminPanel').style.display = 'block';
+        loadAdmin();
+    } else alert("Invalid Username or Password!");
 }
 
-function loadAdminDashboard() {
-    const orders = JSON.parse(localStorage.getItem('he_orders')) || [];
-    const today = new Date().toISOString().split('T')[0];
-    const currentMonth = new Date().getMonth();
-    const currentYear = new Date().getFullYear();
+function closeAdmin() {
+    document.getElementById('adminPanel').style.display = 'none';
+    document.getElementById('storeLayout').style.display = 'grid'; 
+}
 
-    let dSales = 0, mSales = 0, ySales = 0, tSales = 0;
+function showTab(tabId) {
+    document.querySelectorAll('.admin-tab').forEach(t => t.style.display = 'none');
+    document.getElementById(tabId).style.display = 'block';
+}
 
-    orders.forEach(o => {
-        const oDate = new Date(o.date);
-        tSales += o.total;
-        if (o.date === today) dSales += o.total;
-        if (oDate.getMonth() === currentMonth && oDate.getFullYear() === currentYear) mSales += o.total;
-        if (oDate.getFullYear() === currentYear) ySales += o.total;
+function addS(id) {
+    let inv = getInv(); inv.find(x => x.id === id).stock += 10;
+    saveInv(inv); loadAdmin(); render(getInv());
+}
+
+function loadAdmin() {
+    const fakeTotalOrders = 15842;
+    const fakeTotalSales = 4850000;
+    document.getElementById('totalOrders').innerText = fakeTotalOrders.toLocaleString();
+    document.getElementById('totalSales').innerText = "₱" + fakeTotalSales.toLocaleString();
+
+    const o = JSON.parse(localStorage.getItem('he_ords')) || [];
+    const fakeOrdersTable = `<tr><td style="padding:10px;">#9928</td><td>Maria Clara</td><td>₱1,250</td></tr><tr><td style="padding:10px;">#9927</td><td>Juan Dela Cruz</td><td>₱850</td></tr><tr><td style="padding:10px;">#9926</td><td>Pedro Penduko</td><td>₱2,100</td></tr>`;
+    document.getElementById('adminOrdersBody').innerHTML = fakeOrdersTable + o.map(x => `<tr><td style="padding:10px;">#${x.id}</td><td>${x.name}</td><td>${x.total}</td></tr>`).join('');
+    document.getElementById('adminStockTable').innerHTML = `<thead><tr style="text-align:left; color:#888;"><th>Product</th><th>Stock</th><th>Action</th></tr></thead><tbody>` + getInv().map(p => `<tr><td style="padding:10px;">${p.name}</td><td>${p.stock}</td><td><button onclick="addS(${p.id})">+10</button></td></tr>`).join('') + `</tbody>`;
+
+    setTimeout(renderAdminCharts, 200); 
+}
+
+let yearlyAdminChartIns = null;
+let monthlyAdminChartIns = null;
+const adminYearsList = ['2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026'];
+const adminFakeYearlySales = [15000, 22000, 38000, 45000, 60000, 85000, 110000, 150000, 210000, 280000, 350000, 480000, 620000, 850000, 1100000, 1450000];
+const adminMonthsList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const adminMonthlyData = {};
+adminYearsList.forEach((year, index) => {
+    let base = adminFakeYearlySales[index] / 12;
+    adminMonthlyData[year] = adminMonthsList.map(() => Math.floor(base + (Math.random() * (base * 0.4) * 2 - (base * 0.4))));
+});
+
+function renderAdminCharts() {
+    const select = document.getElementById('yearSelect');
+    if (!select) return;
+    select.innerHTML = ''; 
+    adminYearsList.forEach(y => {
+        let opt = document.createElement('option');
+        opt.value = y; opt.innerText = y;
+        if (y === '2026') opt.selected = true; 
+        select.appendChild(opt);
     });
 
-    document.getElementById('dailySales').innerText = "₱" + dSales.toLocaleString();
-    document.getElementById('monthlySales').innerText = "₱" + mSales.toLocaleString();
-    document.getElementById('yearlySales').innerText = "₱" + ySales.toLocaleString();
-    document.getElementById('totalSales').innerText = "₱" + tSales.toLocaleString();
-
-    document.getElementById('adminOrdersTable').innerHTML = orders.slice().reverse().map(o => `
-        <tr onclick="viewOrderDetails('${o.id}')" style="cursor:pointer">
-            <td style="color:blue; text-decoration:underline;">${o.id}</td>
-            <td>${o.customer}</td>
-            <td>${o.items}</td>
-            <td>₱${o.total.toLocaleString()}</td>
-            <td><span class="status-tag">PENDING</span></td>
-        </tr>
-    `).join('');
+    const ctxY = document.getElementById('yearlyChart');
+    if (ctxY) {
+        if (yearlyAdminChartIns) yearlyAdminChartIns.destroy();
+        yearlyAdminChartIns = new Chart(ctxY.getContext('2d'), {
+            type: 'line',
+            data: { labels: adminYearsList, datasets: [{ label: 'Yearly Sales (₱)', data: adminFakeYearlySales, borderColor: '#000', backgroundColor: 'rgba(0,0,0,0.1)', borderWidth: 3, fill: true, tension: 0.3, pointBackgroundColor: '#ee4d2d' }] },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+    }
+    updateAdminMonthlyChart();
 }
 
-function viewOrderDetails(id) {
-    const order = (JSON.parse(localStorage.getItem('he_orders')) || []).find(o => o.id === id);
-    if (order) {
-        document.getElementById('modalDetails').innerHTML = `
-            <h3>ORDER INFO: ${order.id}</h3>
-            <p><strong>Customer:</strong> ${order.customer}</p>
-            <p><strong>Address:</strong> ${order.address}</p>
-            <p><strong>Design:</strong> ${order.items}</p>
-            <h2 style="color:green; margin-top:10px;">Paid: ₱${order.total.toLocaleString()}</h2>
-            <button class="add-btn" onclick="document.getElementById('productModal').style.display='none'">CLOSE</button>
-        `;
-        document.getElementById('productModal').style.display = "block";
+function updateAdminMonthlyChart() {
+    const select = document.getElementById('yearSelect');
+    const ctxM = document.getElementById('adminMonthlyChart');
+    if (!select || !ctxM) return;
+
+    const selectedYear = select.value;
+    const dataForYear = adminMonthlyData[selectedYear];
+    
+    if (monthlyAdminChartIns) monthlyAdminChartIns.destroy();
+    monthlyAdminChartIns = new Chart(ctxM.getContext('2d'), {
+        type: 'bar',
+        data: { labels: adminMonthsList, datasets: [{ label: `Monthly Sales for ${selectedYear} (₱)`, data: dataForYear, backgroundColor: '#ee4d2d', borderRadius: 4 }] },
+        options: { responsive: true, scales: { y: { beginAtZero: true } } }
+    });
+}
+
+function openFooterDetail(title) {
+    let content = '';
+    
+    // Diri nato i-set ang mga text nga mugawas inig click
+    switch(title) {
+        case 'Help Centre':
+            content = `
+                <h2 style="color:#ee4d2d">❓ Help Centre</h2>
+                <p style="margin-top:15px; line-height:1.6;">Naa kay problema sa imong order? Ayaw kabalaka bai! Pwede ka mo-message sa among Live Chat o i-email mi sa <b>support@hetees.com</b>. Active mi gikan 8AM hangtod 8PM adlaw-adlaw.</p>
+            `;
+            break;
+        case 'Payment Methods':
+            content = `
+                <h2 style="color:#ee4d2d">💳 Payment Methods</h2>
+                <p style="margin-top:15px;">Diri sa H & E Tees, sayon ra ang pagbayad. Modawat mi og:</p>
+                <ul style="text-align:left; margin-top:10px; padding-left:20px;">
+                    <li><b>Cash on Delivery (COD)</b> - Bayad inig abot sa item.</li>
+                    <li><b>GCash / Maya</b> - Scan lang ang QR code inig checkout.</li>
+                    <li><b>QRPH</b> - Bisag unsa nga bank app.</li>
+                </ul>
+            `;
+            break;
+        case 'Order Tracking':
+            content = `
+                <h2 style="color:#ee4d2d">🚚 Order Tracking</h2>
+                <p style="margin-top:15px;">Inig ship out sa imong t-shirt, padad-an ka namo og <b>SMS o Email</b> nga naay tracking link. Pwede nimo makita kung asa na dapit imong order (J&T o Flash Express).</p>
+            `;
+            break;
+        case 'Free Shipping':
+            content = `
+                <h2 style="color:#ee4d2d">🔥 Free Shipping</h2>
+                <p style="margin-top:15px;">Gusto kag libreng shipping? Sayon ra! Siguroa nga ang imong order mu-abot og <b>₱1,500 pataas</b> para automatic mawala ang shipping fee sa imong checkout!</p>
+            `;
+            break;
+        case 'Return & Refund':
+            content = `
+                <h2 style="color:#ee4d2d">🔄 Return & Refund</h2>
+                <p style="margin-top:15px;">Kung naay damage ang print o sayop ang size nga nadawat:
+                <br><br>1. Ayaw usa labhi ang shirt.
+                <br>2. Picture-ri ang resibo ug ang item.
+                <br>3. I-message mi sulod sa <b>7 ka adlaw</b> para ma-ilisdan dayon namo.</p>
+            `;
+            break;
+        case 'Shop Policies':
+            content = `
+                <h2 style="color:#ee4d2d">📜 Shop Policies</h2>
+                <p style="margin-top:15px;">Respetoay lang ta bai. No cancellation of orders once na-print na ang design (kay made-to-order mi). Siguroa ang imong size gamit ang among Size Chart.</p>
+            `;
+            break;
+        case 'Privacy Policy':
+            content = `
+                <h2 style="color:#ee4d2d">🔒 Privacy Policy</h2>
+                <p style="margin-top:15px;">Ang imong address ug contact number kay safe sa amoa. Gamiton ra ni namo para sa pag-deliver sa imong order ug dili ni namo i-baligya sa uban.</p>
+            `;
+            break;
+        case 'Flash Deals':
+            content = `
+                <h2 style="color:#ee4d2d">⚡ Flash Deals</h2>
+                <p style="margin-top:15px;">Atangi ang among Flash Sale kada kinsena ug katapusan sa buwan! Mo-ubos ang presyo sa piniling designs hangtod <b>₱250 na lang!</b></p>
+            `;
+            break;
+    }
+
+    // I-display ang sulod sa About Modal
+    const modalContent = document.getElementById('aboutContent');
+    const modal = document.getElementById('aboutModal');
+    
+    if (modalContent && modal) {
+        modalContent.innerHTML = content;
+        modal.style.display = 'block';
     }
 }
-
-// 6. CHECKOUT FORM
-document.getElementById('checkoutForm').onsubmit = function(e) {
-    e.preventDefault();
-    if(cart.length === 0) return alert("Walay sulod imong bag!");
-
-    const name = document.getElementById('custName').value;
-    const newOrder = {
-        id: "ORD-" + Math.floor(Math.random() * 9000 + 1000),
-        customer: name,
-        items: cart.map(i => i.name).join(", "),
-        total: cart.reduce((s, i) => s + i.price, 0),
-        date: new Date().toISOString().split('T')[0],
-        address: document.getElementById('custAddr').value
-    };
-
-    let orders = JSON.parse(localStorage.getItem('he_orders')) || [];
-    orders.push(newOrder);
-    localStorage.setItem('he_orders', JSON.stringify(orders));
-
-    alert("Salamat! Order Placed Successfully!");
-    cart = [];
-    document.getElementById('cartCount').innerText = "0";
-    document.getElementById('checkoutModal').style.display = "none";
-    renderShirts(products);
-};
-
-// 7. UI CONTROLS
-function closeAdmin() {
-    document.getElementById('adminPanel').style.display = "none";
-    document.getElementById('storeLayout').style.display = "grid";
-}
-
-document.getElementById('adminToggleBtn').onclick = () => document.getElementById('loginModal').style.display='block';
-document.getElementById('cartBtn').onclick = () => document.getElementById('cartModal').style.display='block';
-document.getElementById('proceedCheckout').onclick = () => {
-    document.getElementById('cartModal').style.display='none';
-    document.getElementById('checkoutModal').style.display='block';
-};
-
-window.onclick = (e) => { 
-    if (e.target.className === 'modal' || e.target.classList.contains('close-btn')) {
-        document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
-    }
-};
-
-// RUN
-initApp();
