@@ -3,105 +3,300 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>H & E GRAPHIC TEES | Admin & Store</title>
+    <title>H & E GRAPHIC TEES | Premium Shop</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
+<body onload="initApp()">
+
+    <div class="bg-animation">
+        <div class="circle"></div><div class="circle"></div><div class="circle"></div>
+    </div>
+    
+    
 
     <header class="navbar">
-        <div class="logo">H & E GRAPHIC <b>TEES</b></div>
+        <div class="logo" onclick="location.reload()">H & E GRAPHIC <b>TEES</b></div>
         <nav>
             <ul class="nav-links">
-                <li><a href="#" onclick="location.reload()" class="active">Store</a></li>
-                <li><a href="#" id="contactBtn">Contact</a></li>
+                <li><a onclick="location.reload()">Store</a></li>
+                <li><a onclick="openContact()">Contact</a></li>
                 <li><button id="cartBtn" class="cart-trigger">🛒 BAG (<span id="cartCount">0</span>)</button></li>
             </ul>
         </nav>
-        <div class="search-container">
-            <input type="text" id="shirtSearch" placeholder="Search designs...">
-        </div>
+        <div class="search-container"><input type="text" id="shirtSearch" placeholder="Search designs..."></div>
     </header>
 
     <div class="main-layout" id="storeLayout">
         <aside class="sidebar">
             <section class="filter-group">
                 <h3>Categories</h3>
-                <button class="filter-btn active" data-cat="all">All Designs</button>
-                <button class="filter-btn" data-cat="for men">Men's section</button>
-                <button class="filter-btn" data-cat="for women">Women's section</button>
-                <button class="filter-btn" data-cat="unisex">Jacket's section</button>
+                <button class="filter-btn active" onclick="filterCat('all', this)">All Designs</button>
+                <button class="filter-btn" onclick="filterCat('for men', this)">Men's section</button>
+                <button class="filter-btn" onclick="filterCat('for women', this)">Women's section</button>
+                <button class="filter-btn" onclick="filterCat('unisex', this)">Jacket's section</button>
             </section>
-            <section class="filter-group" style="margin-top: 50px; border-top: 1px dashed #ccc; padding-top: 20px;">
-                <button class="filter-btn" id="adminToggleBtn" style="color: #888; font-size: 12px;">⚙️ Admin Dashboard</button>
+            <section class="filter-group" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px;">
+                <h3>Learn More</h3>
+                <button class="filter-btn" onclick="openAbout('company')">🏢 About Company</button>
+                <button class="filter-btn" onclick="openAbout('products')">👕 About Products</button>
+                <button class="filter-btn" onclick="openAbout('owner')">👤 About Owner</button>
             </section>
+            <div class="moving-ads">
+                <marquee behavior="scroll" direction="up" scrollamount="2">🔥 FREE SHIPPING! 🔥<br><br>✨ PREMIUM DRY-FIT ✨</marquee>
+            </div>
+            <button class="filter-btn" onclick="document.getElementById('loginModal').style.display='block'" style="color: #888; font-size: 11px; margin-top:20px;">⚙️ Admin Dashboard</button>
         </aside>
 
         <section class="content">
             <div class="product-grid" id="productGrid"></div>
-        </section>
+            
+            <h2 style="text-align: center; margin: 50px 0 20px;">CUSTOMER FEEDBACK DASHBOARD</h2>
+            
+            <div id="reviewDashboard" class="review-dashboard">
+                <div class="review-controls">
+                    <button class="add-btn active-mode" id="btnStoreView" onclick="setReviewMode('store')">Store</button>
+                    <button class="add-btn inactive-mode" id="btnItemView" onclick="setReviewMode('item')">Specific item</button>
+                    <select id="reviewItemSelect" class="form-input" style="display:none; width: auto; margin-left: 10px; margin-bottom: 0;" onchange="updateReviewDashboard()"></select>
+                </div>
+                
+                <div class="review-stats-grid">
+                    <div class="rating-summary">
+                        <h1 id="avgRatingDisplay">0.0</h1>
+                        <p style="font-size: 14px; color: #888;">out of 5</p>
+                        <p id="totalReviewCount" style="font-weight: bold; margin-top: 5px;">0 Reviews</p>
+                        <div id="avgStarsDisplay" style="color: #ee4d2d; font-size: 24px; margin-top: 5px;">★★★★★</div>
+                    </div>
+                    <div class="rating-chart-container">
+                        <canvas id="ratingChart" height="150"></canvas>
+                    </div>
+                </div>
+                
+                <div class="review-filters">
+                    <span style="font-weight: bold; margin-right: 10px;">Filter:</span>
+                    <button class="filter-star active-star" onclick="setStarFilter('all', this)">Tanan</button>
+                    <button class="filter-star" onclick="setStarFilter(5, this)">5 Star</button>
+                    <button class="filter-star" onclick="setStarFilter(4, this)">4 Star</button>
+                    <button class="filter-star" onclick="setStarFilter(3, this)">3 Star</button>
+                    <button class="filter-star" onclick="setStarFilter(2, this)">2 Star</button>
+                    <button class="filter-star" onclick="setStarFilter(1, this)">1 Star</button>
+                </div>
+                
+                <div id="advancedReviewList" class="advanced-review-list"></div>
+            </div>
+            </section>
     </div>
 
-    <section id="adminPanel" style="display: none; padding: 40px; max-width: 1200px; margin: auto;">
-    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 10px;">
-        <h1>ADMIN SYSTEM</h1>
-        <button onclick="closeAdmin()" class="cart-trigger">BACK TO STORE</button>
-    </div>
-
-    <div style="display: flex; gap: 10px; margin-top: 20px;">
-        <button class="add-btn" onclick="showTab('salesTab')" style="flex:1;">📊 SALES ANALYSIS</button>
-        <button class="add-btn" onclick="showTab('stockTab')" style="flex:1;">📦 STOCKS MANAGEMENT</button>
-        <button class="add-btn" onclick="showTab('orderTab')" style="flex:1;">🚚 ORDER TRACKING</button>
-    </div>
-
-    <div id="salesTab" class="admin-tab" style="margin-top: 30px;">
-        <h3>SALES PERFORMANCE</h3>
-        <div class="stats-grid">
-            <div class="stat-card"><p>DAILY</p><h2 id="dailySales">₱0</h2></div>
-            <div class="stat-card"><p>MONTHLY</p><h2 id="monthlySales">₱0</h2></div>
-            <div class="stat-card"><p>YEARLY</p><h2 id="yearlySales">₱0</h2></div>
-            <div class="stat-card"><p>TOTAL</p><h2 id="totalSales">₱0</h2></div>
+    <div id="productModal" class="modal" onclick="closeOutside(event)">
+        <div class="modal-content product-modal-fix fade-in">
+            <span class="close-btn" onclick="closeModals()">&times;</span>
+            <div class="modal-grid">
+                <div id="modalDetails" class="modal-left"></div>
+                <div class="modal-review-section">
+                    <h3>REVIEWS</h3>
+                    <div id="reviewList" class="review-scroll-area"></div>
+                    <form id="reviewForm" class="modal-review-form">
+                        <select id="reviewStars" class="form-input"><option value="5">★★★★★</option><option value="4">★★★★</option></select>
+                        <textarea id="reviewText" placeholder="Write feedback..." class="form-input" required></textarea>
+                        <button type="submit" class="add-btn">SUBMIT REVIEW</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div id="stockTab" class="admin-tab" style="margin-top: 30px; display:none;">
-        <h3>INVENTORY CONTROL</h3>
-        <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
-            <thead>
-                <tr>
-                    <th>Product Name</th>
-                    <th>Current Stock</th>
-                    <th>Update Quantity</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="adminStockTable"></tbody>
-        </table>
+    <div id="checkoutModal" class="modal" onclick="closeOutside(event)">
+        <div class="modal-content shopee-checkout slide-up" style="width: 500px !important; max-width: 95% !important; height: fit-content !important; margin: 5vh auto !important; padding: 0; border-radius: 8px; overflow: hidden; border: none;">
+            <span class="close-btn" onclick="closeModals()" style="right: 20px; top: 15px; color: #888;">&times;</span>
+            
+            <div style="background: #fff; padding: 20px; border-bottom: 1px dashed #ee4d2d;">
+                <h2 style="color: #ee4d2d; font-size: 18px; display: flex; align-items: center; gap: 10px;">
+                    📍 Delivery Address
+                </h2>
+                <div style="margin-top: 15px; display: grid; gap: 10px;">
+                    <input type="text" id="custName" placeholder="Full Name" class="shopee-input" required>
+                    <input type="text" id="custContact" placeholder="Contact Number" class="shopee-input" required>
+                    <input type="email" id="custEmail" placeholder="Email Address" class="shopee-input" required>
+                    <textarea id="custAddr" placeholder="Complete Address" class="shopee-input" style="height: 60px;" required></textarea>
+                    <input type="text" id="custNote" placeholder="Note for driver (e.g. Landmark)" class="shopee-input">
+                </div>
+            </div>
+
+            <div style="background: #fafafa; padding: 20px;">
+                <h4 style="margin-bottom: 10px; color: #555; display: flex; align-items: center; gap: 8px;">📦 Summary</h4>
+                <div id="checkoutItemsList" style="font-size: 14px;"></div>
+                <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #eee;">
+    <h4 style="margin-bottom: 10px; color: #555; display: flex; align-items: center; gap: 8px;">🎟️ Shop Voucher</h4>
+    <div style="display: flex; gap: 5px;">
+        <input type="text" id="voucherInput" placeholder="Enter Code (e.g. HEFREE50)" class="shopee-input" style="margin:0; flex:1;">
+        <button type="button" onclick="applyVoucher()" style="background:#000; color:#fff; border:none; padding:0 15px; cursor:pointer; border-radius:2px; font-weight:bold;">Apply</button>
+    </div>
+    <p id="voucherMsg" style="font-size: 12px; margin-top: 5px; font-weight: bold; min-height: 15px;"></p>
+</div>
+                <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #eee;">
+                    <h4 style="margin-bottom: 10px; color: #555;">💳 Payment Method</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                        <label class="pay-option"><input type="radio" name="payMethod" value="COD" checked> COD</label>
+                        <label class="pay-option"><input type="radio" name="payMethod" value="GCASH"> GCASH</label>
+                        <label class="pay-option"><input type="radio" name="payMethod" value="MAYA"> MAYA</label>
+                        <label class="pay-option"><input type="radio" name="payMethod" value="QRPH"> QRPH</label>
+                        <label class="pay-option" style="grid-column: span 2;"><input type="radio" name="payMethod" value="HKpaylater"> HKpaylater</label>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: #fff; padding: 20px; border-top: 1px solid #eee; display: flex; flex-direction: column; align-items: flex-end;">
+                <div style="font-size: 14px; color: #888;">Total Payment:</div>
+                <div class="final-total" id="finalPriceDisplay" style="margin: 5px 0 15px 0;">₱0</div>
+                <button type="submit" form="checkoutForm" class="shopee-place-order" style="border-radius: 4px; padding: 12px 40px; width: auto;">PLACE ORDER</button>
+            </div>
+            
+            <form id="checkoutForm" style="display:none;"></form>
+        </div>
     </div>
 
-    <div id="orderTab" class="admin-tab" style="margin-top: 30px; display:none;">
-        <h3>CUSTOMER ORDERS</h3>
-        <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
-            <thead>
-                <tr>
-                    <th>Order ID</th>
-                    <th>Customer</th>
-                    <th>Items</th>
-                    <th>Total</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody id="adminOrdersTable"></tbody>
-        </table>
-    </div>
-</section>
-   
-   
+    <section id="adminPanel" style="display: none; padding: 40px; max-width: 1200px; margin: auto;">
+        <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #000; padding-bottom: 10px;">
+            <h1>ADMIN SYSTEM</h1>
+            <button onclick="closeAdmin()" class="cart-trigger">STORE FRONT</button>
+        </div>
+        <div class="admin-nav-btns" style="margin: 20px 0; display: flex; gap: 10px;">
+            <button class="add-btn" onclick="showTab('salesTab')">📊 SALES</button>
+            <button class="add-btn" onclick="showTab('stockTab')">📦 INVENTORY</button>
+            <button class="add-btn" onclick="showTab('orderTab')">🚚 ORDERS</button>
+        </div>
+        
+        <div id="salesTab" class="admin-tab">
+            <div class="stats-grid">
+                <div class="stat-card"><p>TOTAL SYSTEM ORDERS</p><h2 id="totalOrders">0</h2></div>
+                <div class="stat-card"><p>TOTAL SYSTEM SALES</p><h2 id="totalSales">₱0</h2></div>
+            </div>
+            
+            <div style="margin-top: 30px; padding: 20px; background: #fff; border: 1px solid #eee; border-radius: 8px;">
+                <h3 style="margin-bottom: 15px; color: #333;">📈 Yearly Revenue Trend (2011 - 2026)</h3>
+                <canvas id="yearlyChart" height="80"></canvas>
+            </div>
 
-    <div id="loginModal" class="modal"><div class="modal-content" style="max-width: 350px; text-align: center;"><h2 style="margin-bottom: 20px;">Admin Login</h2><input type="text" id="adminUser" placeholder="Username" class="form-input"><input type="password" id="adminPass" placeholder="Password" class="form-input"><button onclick="checkLogin()" class="add-btn">LOGIN</button></div></div>
-    <div id="productModal" class="modal"><div class="modal-content"><span class="close-btn">&times;</span><div id="modalDetails"></div></div></div>
-    <div id="cartModal" class="modal"><div class="modal-content"><h2>YOUR BAG</h2><div id="cartItemsList"></div><div class="cart-total-section"><h3 id="cartTotal">Total: ₱0.00</h3><button class="add-btn" id="proceedCheckout">PROCEED TO CHECKOUT</button></div></div></div>
-    <div id="checkoutModal" class="modal"><div class="modal-content"><h2>Checkout Details</h2><form id="checkoutForm"><input type="text" id="custName" placeholder="Full Name" class="form-input" required><input type="text" id="custAddr" placeholder="Shipping Address" class="form-input" required><button type="submit" class="add-btn">Place Order</button></form></div></div>
+            <div style="margin-top: 20px; padding: 20px; background: #fff; border: 1px solid #eee; border-radius: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h3 style="color: #333;">📊 Monthly Breakdown</h3>
+                    <select id="yearSelect" style="padding: 5px 10px; font-weight: bold;" onchange="updateAdminMonthlyChart()"></select>
+                </div>
+                <canvas id="adminMonthlyChart" height="80"></canvas>
+            </div>
+        </div>
+
+        <div id="stockTab" class="admin-tab" style="display:none;">
+            <table id="adminStockTable" style="width:100%; border-collapse:collapse;"></table>
+        </div>
+
+        <div id="orderTab" class="admin-tab" style="display:none;">
+            <table style="width:100%; border-collapse:collapse; text-align:left;">
+                <thead><tr style="background:#000; color:#fff;"><th style="padding:10px;">ID</th><th>Customer</th><th>Total</th></tr></thead>
+                <tbody id="adminOrdersBody"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <div id="loginModal" class="modal" onclick="closeOutside(event)"><div class="modal-content" style="max-width:300px;"><span class="close-btn" onclick="closeModals()">&times;</span><h2>Admin</h2><input type="text" id="adminUser" placeholder="User (admin)" class="form-input"><input type="password" id="adminPass" placeholder="Pass (admin)" class="form-input"><button onclick="checkLogin()" class="add-btn">LOGIN</button></div></div>
+    
+    <div id="cartModal" class="modal" onclick="closeOutside(event)">
+        <div class="modal-content pop-in" style="width: 450px !important; max-width: 90% !important; height: fit-content !important; margin: 20vh auto !important; padding: 30px; border-radius: 15px; border: 2px solid #000; background: #fff; position: relative;">
+            <span class="close-btn" onclick="closeModals()" style="position: absolute; top: 10px; right: 15px;">&times;</span>
+            <h2 style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px;">🛒 IMONG BAG</h2>
+            <div id="cartItemsList" style="margin-bottom: 15px; max-height: 250px; overflow-y: auto; padding-right: 5px;"></div>
+            <h3 id="cartTotalDisplay" style="text-align: right; margin-bottom: 15px; color: #ee4d2d;"></h3>
+            <button class="add-btn" id="proceedCheckout" style="width: 100%; border-radius: 25px; padding: 12px; font-size: 16px;">PROCEED TO CHECKOUT</button>
+        </div>
+    </div>
+    
+    <div id="promoModal" class="modal" onclick="closeOutside(event)">
+        <div class="modal-content pop-in" style="max-width: 350px; height: fit-content; margin: 15vh auto; padding: 40px 20px; text-align: center; border: 3px solid #000; border-radius: 15px; background: #fff;">
+            <span class="close-btn" onclick="closeModals()">&times;</span>
+            <h2 style="color: #ee4d2d; margin-bottom: 10px;">🎁✨ SPECIAL OFFER ✨🎁</h2>
+            <p style="font-size: 16px; margin-bottom: 15px;">Use Voucher Code:<br><b style="font-size: 26px; color: #000; letter-spacing: 2px;">HEFREE50</b></p>
+            <p style="font-size: 13px; color: #555; margin-bottom: 20px;">🎉 Get 50% OFF on your entire bag! 🎉</p>
+            <button class="add-btn" onclick="closePromo()" style="width: 80%; border-radius: 25px; padding: 12px; font-size: 16px;">CLAIM GIFT 🛍️</button>
+        </div>
+    </div>
+
+    <div id="contactModal" class="modal" onclick="closeOutside(event)"><div class="modal-content" style="max-width: 400px; height: fit-content; margin: 20vh auto; text-align: center; border-radius: 15px;"><span class="close-btn" onclick="closeModals()">&times;</span><h2 style="margin-bottom: 10px;">CONTACT US</h2><p>📞 +63 912 345 6789</p><p>📧 h.e.tees@gmail.com</p></div></div>
+    
+    <div id="aboutModal" class="modal" onclick="closeOutside(event)">
+        <div class="modal-content pop-in" style="width: 400px !important; max-width: 90% !important; height: fit-content !important; margin: 20vh auto !important; padding: 30px; text-align: center; border-radius: 15px; border: 2px solid #000; background: #fff; position: relative;">
+            <span class="close-btn" onclick="closeModals()" style="position: absolute; top: 10px; right: 15px;">&times;</span>
+            <div id="aboutContent"></div>
+        </div>
+    </div>
+    <div id="newArrivalModal" class="modal" onclick="closeOutside(event)">
+        <div class="modal-content pop-in" style="max-width: 380px; height: fit-content; margin: 15vh auto; padding: 30px 20px; text-align: center; border: 3px solid #000; border-radius: 15px; background: #fff; position: relative;">
+            <span class="close-btn" onclick="document.getElementById('newArrivalModal').style.display='none'" style="position: absolute; top: 10px; right: 15px;">&times;</span>
+            
+            <div style="background: #000; color: #fff; padding: 5px 15px; font-weight: bold; border-radius: 20px; display: inline-block; margin-bottom: 15px; font-size: 11px; letter-spacing: 1px;">
+                🔥 JUST DROPPED 🔥
+            </div>
+            
+            <h2 style="margin-bottom: 10px; text-transform: uppercase;">Chrome Horizon</h2>
+            
+            <div style="background: #fafafa; border-radius: 10px; padding: 10px; margin-bottom: 15px;">
+                <img src="images/men_chrome.png" onerror="this.src='https://placehold.co/300x300?text=Chrome+Horizon'" style="width: 100%; height: 200px; object-fit: contain;">
+            </div>
+            
+            <p style="font-size: 13px; color: #555; margin-bottom: 10px;">Upgrade your streetwear game with our newest premium men's collection.</p>
+            <p style="font-size: 24px; font-weight: bold; color: #ee4d2d; margin-bottom: 20px;">₱450</p>
+            
+            <button class="add-btn" onclick="document.getElementById('newArrivalModal').style.display='none'; openP(7);" style="width: 90%; border-radius: 25px; padding: 12px; font-size: 15px; background: #ee4d2d;">
+                VIEW ITEM 👀
+            </button>
+        </div>
+    </div>
+
+    <script>
+    setTimeout(() => {
+        if (!sessionStorage.getItem('newArrivalShown')) {
+            let newArrModal = document.getElementById('newArrivalModal');
+            if(newArrModal) newArrModal.style.display = 'flex';
+            sessionStorage.setItem('newArrivalShown', 'true');
+        }
+    }, 3500); // Gikan sa 8000, gihimo natong 1500
+</script>
 
     <script src="script.js"></script>
+
+    <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #eee;">
+    
+    <div style="display: flex; gap: 5px;">
+      
+       
+    </div>
+    <p id="voucherMsg" style="font-size: 12px; margin-top: 5px; font-weight: bold;"></p>
+</div>
+
+<footer class="main-footer">
+    <div class="footer-container">
+        <div class="footer-column">
+            <h4>CUSTOMER SERVICE</h4>
+            <ul>
+                <li onclick="openFooterDetail('Help Centre')">Help Centre</li>
+                <li onclick="openFooterDetail('Payment Methods')">Payment Methods</li>
+                <li onclick="openFooterDetail('Order Tracking')">Order Tracking</li>
+                <li onclick="openFooterDetail('Free Shipping')">Free Shipping</li>
+                <li onclick="openFooterDetail('Return & Refund')">Return & Refund</li>
+                <li onclick="openContact()">Contact Us</li>
+            </ul>
+        </div>
+
+        <div class="footer-column">
+            <h4>ABOUT H & E TEES</h4>
+            <ul>
+                <li onclick="openAbout('company')">About Us</li>
+                <li onclick="openFooterDetail('Shop Policies')">Shop Policies</li>
+                <li onclick="openFooterDetail('Privacy Policy')">Privacy Policy</li>
+                <li onclick="openFooterDetail('Flash Deals')">Flash Deals</li>
+            </ul>
+        </div>
+        
+        </div>
+</footer>
 </body>
 </html>
