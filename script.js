@@ -182,7 +182,7 @@ if (checkoutForm) {
         e.preventDefault();
         
         if(!document.getElementById('custName').value || !document.getElementById('custAddr').value) {
-            return alert("Please fill up all required fields!");
+            return alert("Please fill out all required fields!");
         }
 
         let inv = getInv();
@@ -445,57 +445,57 @@ function openFooterDetail(title) {
         case 'Help Centre':
             content = `
                 <h2 style="color:#ee4d2d">❓ Help Centre</h2>
-                <p style="margin-top:15px; line-height:1.6;">Having trouble with your order? Don't worry! You can message us via Live Chat or email us at <b>support@hetees.com</b>. We are active from 8AM to 8PM daily.</p>
+                <p style="margin-top:15px; line-height:1.6;">Having trouble with your order? Don't worry! You can message our Live Chat or email us at <b>support@hetees.com</b>. We are active from 8AM to 8PM daily.</p>
             `;
             break;
         case 'Payment Methods':
             content = `
                 <h2 style="color:#ee4d2d">💳 Payment Methods</h2>
-                <p style="margin-top:15px;">At H & E Tees, payment is easy. We accept:</p>
+                <p style="margin-top:15px;">At H & E Tees, paying is easy. We accept:</p>
                 <ul style="text-align:left; margin-top:10px; padding-left:20px;">
-                    <li><b>Cash on Delivery (COD)</b> - Pay upon item arrival.</li>
+                    <li><b>Cash on Delivery (COD)</b> - Pay upon arrival.</li>
                     <li><b>GCash / Maya</b> - Scan the QR code during checkout.</li>
-                    <li><b>QRPH</b> - Compatible with any banking app.</li>
+                    <li><b>QRPH</b> - Use any bank app.</li>
                 </ul>
             `;
             break;
         case 'Order Tracking':
             content = `
                 <h2 style="color:#ee4d2d">🚚 Order Tracking</h2>
-                <p style="margin-top:15px;">Once your shirt is shipped, we will send an <b>SMS or Email</b> with a tracking link. You can track your order via J&T or Flash Express.</p>
+                <p style="margin-top:15px;">When your shirt ships, we will send an <b>SMS or Email</b> with a tracking link. You can track your order via J&T or Flash Express.</p>
             `;
             break;
         case 'Free Shipping':
             content = `
                 <h2 style="color:#ee4d2d">🔥 Free Shipping</h2>
-                <p style="margin-top:15px;">Want free shipping? Simple! Just ensure your order reaches <b>₱1,500 and above</b> to automatically waive the shipping fee at checkout!</p>
+                <p style="margin-top:15px;">Want free shipping? Simple! Ensure your order reaches <b>₱1,500 and above</b> and the shipping fee will automatically be removed at checkout!</p>
             `;
             break;
         case 'Return & Refund':
             content = `
                 <h2 style="color:#ee4d2d">🔄 Return & Refund</h2>
-                <p style="margin-top:15px;">If there is print damage or an incorrect size received:
+                <p style="margin-top:15px;">If there is print damage or the wrong size received:
                 <br><br>1. Do not wash the shirt yet.
-                <br>2. Take a photo of the receipt and the item.
-                <br>3. Message us within <b>7 days</b> so we can replace it immediately.</p>
+                <br>2. Take a photo of the receipt and item.
+                <br>3. Message us within <b>7 days</b> for an immediate replacement.</p>
             `;
             break;
         case 'Shop Policies':
             content = `
                 <h2 style="color:#ee4d2d">📜 Shop Policies</h2>
-                <p style="margin-top:15px;">No cancellation of orders once the design has been printed (as products are made-to-order). Please confirm your size using our Size Chart.</p>
+                <p style="margin-top:15px;">No cancellation of orders once the design is printed (as we are made-to-order). Please verify your size using our Size Chart.</p>
             `;
             break;
         case 'Privacy Policy':
             content = `
                 <h2 style="color:#ee4d2d">🔒 Privacy Policy</h2>
-                <p style="margin-top:15px;">Your address and contact number are safe with us. We only use this information for delivery purposes and do not sell it to third parties.</p>
+                <p style="margin-top:15px;">Your address and contact number are safe with us. We only use them for order delivery and do not sell your data to third parties.</p>
             `;
             break;
         case 'Flash Deals':
             content = `
                 <h2 style="color:#ee4d2d">⚡ Flash Deals</h2>
-                <p style="margin-top:15px;">Watch out for our Flash Sales every 15th and end of the month! Selected designs drop as low as <b>₱250!</b></p>
+                <p style="margin-top:15px;">Watch out for our Flash Sales every 15th and end of the month! Prices for selected designs drop as low as <b>₱250!</b></p>
             `;
             break;
     }
