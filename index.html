@@ -196,7 +196,15 @@
         </div>
     </section>
 
-    <div id="loginModal" class="modal" onclick="closeOutside(event)"><div class="modal-content" style="max-width:300px;"><span class="close-btn" onclick="closeModals()">&times;</span><h2>Admin</h2><input type="text" id="adminUser" placeholder="User (admin)" class="form-input"><input type="password" id="adminPass" placeholder="Pass (admin)" class="form-input"><button onclick="checkLogin()" class="add-btn">LOGIN</button></div></div>
+    <div id="loginModal" class="modal" onclick="closeOutside(event)">
+    <div class="modal-content" style="max-width:300px;">
+        <span class="close-btn" onclick="closeModals()">&times;</span>
+        <h2>Admin</h2>
+        <input type="text" id="adminUser" placeholder="Username" class="form-input">
+        <input type="password" id="adminPass" placeholder="Password" class="form-input">
+        <button onclick="checkLogin()" class="add-btn">LOGIN</button>
+    </div>
+</div>
     
     <div id="cartModal" class="modal" onclick="closeOutside(event)">
         <div class="modal-content pop-in" style="width: 450px !important; max-width: 90% !important; height: fit-content !important; margin: 20vh auto !important; padding: 30px; border-radius: 15px; border: 2px solid #000; background: #fff; position: relative;">
