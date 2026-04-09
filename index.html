@@ -12,8 +12,6 @@
     <div class="bg-animation">
         <div class="circle"></div><div class="circle"></div><div class="circle"></div>
     </div>
-    
-    
 
     <header class="navbar">
         <div class="logo" onclick="location.reload()">H & E GRAPHIC <b>TEES</b></div>
@@ -74,7 +72,7 @@
                 
                 <div class="review-filters">
                     <span style="font-weight: bold; margin-right: 10px;">Filter:</span>
-                    <button class="filter-star active-star" onclick="setStarFilter('all', this)">Tanan</button>
+                    <button class="filter-star active-star" onclick="setStarFilter('all', this)">All</button>
                     <button class="filter-star" onclick="setStarFilter(5, this)">5 Star</button>
                     <button class="filter-star" onclick="setStarFilter(4, this)">4 Star</button>
                     <button class="filter-star" onclick="setStarFilter(3, this)">3 Star</button>
@@ -126,13 +124,13 @@
                 <h4 style="margin-bottom: 10px; color: #555; display: flex; align-items: center; gap: 8px;">📦 Summary</h4>
                 <div id="checkoutItemsList" style="font-size: 14px;"></div>
                 <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #eee;">
-    <h4 style="margin-bottom: 10px; color: #555; display: flex; align-items: center; gap: 8px;">🎟️ Shop Voucher</h4>
-    <div style="display: flex; gap: 5px;">
-        <input type="text" id="voucherInput" placeholder="Enter Code (e.g. HEFREE50)" class="shopee-input" style="margin:0; flex:1;">
-        <button type="button" onclick="applyVoucher()" style="background:#000; color:#fff; border:none; padding:0 15px; cursor:pointer; border-radius:2px; font-weight:bold;">Apply</button>
-    </div>
-    <p id="voucherMsg" style="font-size: 12px; margin-top: 5px; font-weight: bold; min-height: 15px;"></p>
-</div>
+                    <h4 style="margin-bottom: 10px; color: #555; display: flex; align-items: center; gap: 8px;">🎟️ Shop Voucher</h4>
+                    <div style="display: flex; gap: 5px;">
+                        <input type="text" id="voucherInput" placeholder="Enter Code (e.g. HEFREE50)" class="shopee-input" style="margin:0; flex:1;">
+                        <button type="button" onclick="applyVoucher()" style="background:#000; color:#fff; border:none; padding:0 15px; cursor:pointer; border-radius:2px; font-weight:bold;">Apply</button>
+                    </div>
+                    <p id="voucherMsg" style="font-size: 12px; margin-top: 5px; font-weight: bold; min-height: 15px;"></p>
+                </div>
                 <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #eee;">
                     <h4 style="margin-bottom: 10px; color: #555;">💳 Payment Method</h4>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
@@ -203,7 +201,7 @@
     <div id="cartModal" class="modal" onclick="closeOutside(event)">
         <div class="modal-content pop-in" style="width: 450px !important; max-width: 90% !important; height: fit-content !important; margin: 20vh auto !important; padding: 30px; border-radius: 15px; border: 2px solid #000; background: #fff; position: relative;">
             <span class="close-btn" onclick="closeModals()" style="position: absolute; top: 10px; right: 15px;">&times;</span>
-            <h2 style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px;">🛒 IMONG BAG</h2>
+            <h2 style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px;">🛒 YOUR BAG</h2>
             <div id="cartItemsList" style="margin-bottom: 15px; max-height: 250px; overflow-y: auto; padding-right: 5px;"></div>
             <h3 id="cartTotalDisplay" style="text-align: right; margin-bottom: 15px; color: #ee4d2d;"></h3>
             <button class="add-btn" id="proceedCheckout" style="width: 100%; border-radius: 25px; padding: 12px; font-size: 16px;">PROCEED TO CHECKOUT</button>
@@ -251,26 +249,7 @@
         </div>
     </div>
 
-    <script>
-    setTimeout(() => {
-        if (!sessionStorage.getItem('newArrivalShown')) {
-            let newArrModal = document.getElementById('newArrivalModal');
-            if(newArrModal) newArrModal.style.display = 'flex';
-            sessionStorage.setItem('newArrivalShown', 'true');
-        }
-    }, 3500); // Gikan sa 8000, gihimo natong 1500
-</script>
-
     <script src="script.js"></script>
-
-    <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #eee;">
-    
-    <div style="display: flex; gap: 5px;">
-      
-       
-    </div>
-    <p id="voucherMsg" style="font-size: 12px; margin-top: 5px; font-weight: bold;"></p>
-</div>
 
 <footer class="main-footer">
     <div class="footer-container">
@@ -295,8 +274,10 @@
                 <li onclick="openFooterDetail('Flash Deals')">Flash Deals</li>
             </ul>
         </div>
-        
-        </div>
+    </div>
+    <div class="footer-bottom">
+        &copy; 2026 H & E Graphic Tees. All rights reserved.
+    </div>
 </footer>
 </body>
 </html>
