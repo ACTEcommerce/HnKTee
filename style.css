@@ -1,34 +1,29 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { background: #fdfdfd; color: #000; font-family: 'Segoe UI', sans-serif; overflow-x: hidden; }
 
-/* MOTION BG */
 .bg-animation { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
 .circle { position: absolute; border-radius: 50%; background: rgba(0,0,0,0.02); animation: float 15s infinite alternate; }
 .circle:nth-child(1) { width: 300px; height: 300px; top: 5%; left: 5%; }
 .circle:nth-child(2) { width: 250px; height: 250px; top: 60%; left: 75%; }
 @keyframes float { from { transform: translate(0,0); } to { transform: translate(40px, 60px); } }
 
-/* NAVBAR */
 .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; border-bottom: 2px solid #000; position: sticky; top: 0; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); z-index: 100; }
 .logo { font-size: 20px; font-weight: bold; cursor: pointer; }
 .nav-links { list-style: none; display: flex; gap: 20px; }
 .nav-links a { font-weight: bold; font-size: 13px; text-transform: uppercase; cursor: pointer; }
 .cart-trigger { background: #000; color: #fff; border: none; padding: 8px 20px; cursor: pointer; border-radius: 20px; }
 
-/* LAYOUT */
 .main-layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
 .sidebar { padding: 30px; border-right: 1px solid #eee; }
 .filter-btn { display: block; width: 100%; text-align: left; background: none; border: none; padding: 10px 0; cursor: pointer; font-size: 13px; color: #555; }
 .filter-btn.active { font-weight: bold; color: #000; text-decoration: underline; }
 
-/* GRID */
 .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px; padding: 30px; }
 .card { border: 1px solid #eee; padding: 15px; text-align: center; background: #fff; transition: 0.3s; }
 .card:hover { transform: translateY(-10px); border-color: #000; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
 .card img { width: 100%; height: 220px; object-fit: contain; }
 .add-btn { width: 100%; padding: 12px; background: #000; color: #fff; border: none; cursor: pointer; font-weight: bold; }
 
-/* MODALS */
 .modal { display: none; position: fixed; z-index: 1000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); overflow-y: auto; }
 .modal-content { background: #fff; margin: 50px auto; padding: 30px; border: 1px solid #000; position: relative; }
 .product-modal-fix { max-width: 900px !important; }
@@ -37,7 +32,6 @@ body { background: #fdfdfd; color: #000; font-family: 'Segoe UI', sans-serif; ov
 .modal-review-section { border-left: 1px solid #eee; padding-left: 30px; }
 .review-scroll-area { max-height: 250px; overflow-y: auto; background: #fafafa; padding: 15px; border: 1px solid #eee; margin-bottom: 15px; }
 
-/* SHOPEE UI & OTHERS */
 .shopee-input { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ddd; outline: none; }
 .final-total { color: #ee4d2d; font-size: 24px; font-weight: bold; margin: 15px 0; }
 .shopee-place-order { width: 100%; background: #ee4d2d; color: #fff; border: none; padding: 15px; font-weight: bold; cursor: pointer; }
@@ -46,7 +40,6 @@ body { background: #fdfdfd; color: #000; font-family: 'Segoe UI', sans-serif; ov
 .close-btn { position: absolute; top: 10px; right: 15px; font-size: 24px; cursor: pointer; z-index: 10; }
 .form-input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; }
 
-/* BAG-O: REVIEW DASHBOARD CSS */
 .review-dashboard { background: #fff; border: 1px solid #eee; border-radius: 8px; padding: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.02); margin: 0 30px 30px 30px; }
 .review-controls { display: flex; gap: 10px; margin-bottom: 20px; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 15px; }
 .review-controls .add-btn { width: auto; padding: 10px 20px; border-radius: 20px; }
@@ -90,7 +83,6 @@ body { background: #fdfdfd; color: #000; font-family: 'Segoe UI', sans-serif; ov
     outline: none;
 }
 
-/* FOOTER STYLING */
 .main-footer {
     background: #fbfbfb;
     padding: 60px 5% 30px;
@@ -129,28 +121,6 @@ body { background: #fdfdfd; color: #000; font-family: 'Segoe UI', sans-serif; ov
     color: #ee4d2d;
 }
 
-.social-links li {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.logistics-icons {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.logi-box {
-    border: 1px solid #ddd;
-    padding: 5px 10px;
-    font-size: 11px;
-    font-weight: bold;
-    background: white;
-    color: #555;
-    border-radius: 2px;
-}
-
 .footer-bottom {
     margin-top: 50px;
     padding-top: 20px;
@@ -160,17 +130,11 @@ body { background: #fdfdfd; color: #000; font-family: 'Segoe UI', sans-serif; ov
     color: #888;
 }
 
-/* ==========================================================================
-   MOBILE RESPONSIVE FIX (Para sa Phone ug Tablet)
-   ========================================================================== */
-
 @media (max-width: 768px) {
-    /* 1. Layout: Himoon natong usa ka column ang Sidebar ug Content */
     .main-layout {
         grid-template-columns: 1fr;
     }
 
-    /* 2. Sidebar: Himoon natong scrollable horizontal or i-tago */
     .sidebar {
         padding: 15px;
         display: flex;
@@ -178,9 +142,9 @@ body { background: #fdfdfd; color: #000; font-family: 'Segoe UI', sans-serif; ov
         gap: 10px;
         white-space: nowrap;
         border-right: none;
-        border-bottom: 1px solid var(--slate-blue);
+        border-bottom: 1px solid #eee;
         position: sticky;
-        top: 70px; /* Ubos sa navbar */
+        top: 70px;
         z-index: 90;
     }
 
@@ -194,19 +158,18 @@ body { background: #fdfdfd; color: #000; font-family: 'Segoe UI', sans-serif; ov
     }
 
     .sidebar h3, .moving-ads, .sidebar button[onclick*="loginModal"] {
-        display: none; /* Tago-on ang dili kaayo importante sa mobile sidebar */
+        display: none;
     }
 
     .filter-btn {
         display: inline-block;
         width: auto;
         padding: 5px 15px;
-        background: var(--white);
+        background: #fff;
         border-radius: 15px;
-        border: 1px solid var(--dark-navy);
+        border: 1px solid #000;
     }
 
-    /* 3. Product Grid: 2 columns para dili dako kaayo ang images */
     .product-grid {
         grid-template-columns: repeat(2, 1fr);
         padding: 15px;
@@ -214,10 +177,9 @@ body { background: #fdfdfd; color: #000; font-family: 'Segoe UI', sans-serif; ov
     }
 
     .card img {
-        height: 150px; /* Pakubsan gamay ang image sa phone */
+        height: 150px;
     }
 
-    /* 4. Navbar: I-adjust ang spacing */
     .navbar {
         padding: 10px 15px;
     }
@@ -230,7 +192,6 @@ body { background: #fdfdfd; color: #000; font-family: 'Segoe UI', sans-serif; ov
         gap: 10px;
     }
 
-    /* 5. Modals: Himoon natong full width ang content */
     .modal-content {
         width: 95% !important;
         margin: 20px auto;
@@ -238,29 +199,26 @@ body { background: #fdfdfd; color: #000; font-family: 'Segoe UI', sans-serif; ov
     }
 
     .modal-grid {
-        grid-template-columns: 1fr; /* I-stack ang image ug details */
+        grid-template-columns: 1fr;
     }
 
-    /* 6. Dashboard: I-stack ang graph ug summary */
     .review-stats-grid {
         grid-template-columns: 1fr;
     }
 
     .rating-summary {
         border-right: none;
-        border-bottom: 1px solid var(--mist-grey);
+        border-bottom: 1px solid #eee;
         padding-bottom: 15px;
         margin-bottom: 15px;
     }
 
-    /* 7. Footer: Himoon natong 2 columns or stack */
     .footer-container {
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
         padding: 30px 20px;
     }
 
-    /* 8. Checkout: I-fix ang alignment */
     .shopee-checkout {
         width: 100% !important;
         height: 100% !important;
@@ -269,13 +227,12 @@ body { background: #fdfdfd; color: #000; font-family: 'Segoe UI', sans-serif; ov
     }
 }
 
-/* Para sa gagmay kaayo nga phone */
 @media (max-width: 480px) {
     .footer-container {
         grid-template-columns: 1fr;
     }
     
     .product-grid {
-        grid-template-columns: repeat(2, 1fr); /* 2 items per row gihapon */
+        grid-template-columns: repeat(2, 1fr);
     }
 }
